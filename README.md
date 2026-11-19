@@ -11,12 +11,20 @@ Türkçe kitap yayıncılığı için Claude Code eklentisi. Üç beceri getirir
 
 ## Kurulum (Windows, PowerShell)
 
+Tek satır: Claude Code, Git, Typst, Pandoc, Python, eklentiler ve Belgeler\Dizgi çalışma klasörü.
+
+```powershell
+irm https://raw.githubusercontent.com/ahmetmetintr/yayinevi-dizgi/main/kurulum/windows.ps1 | iex
+```
+
+Yalnız eklenti (araçlar kuruluysa):
+
 ```powershell
 claude plugin marketplace add ahmetmetintr/yayinevi-dizgi
 claude plugin install dizgi@yayinevi-dizgi
 ```
 
-Gerekenler: Typst 0.13+, Pandoc, Python 3 ve `py -m pip install --user pypdf pymupdf python-docx`.
+Gerekenler: Typst 0.13+, Pandoc, Python 3 ve `py -m pip install --user pypdf pymupdf python-docx`. Lisans: MIT.
 Adım adım eğitim ve kopyala-yapıştır promptlar: `egitim/` (sayfa `python3 egitim/uret.py` ile üretilir).
 
 ## Geliştirme

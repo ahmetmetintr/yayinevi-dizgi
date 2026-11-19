@@ -89,6 +89,10 @@ button { font: 500 0.8rem var(--f-kod); border-radius: 3px; cursor: pointer; pad
 .komutlar { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 12px; }
 .komutlar .metin-kutu pre { font-size: 0.85rem; padding: 12px 18px 14px; }
 
+.yedek { border: 1px dashed var(--cizgi); background: var(--yuzey); }
+.yedek summary { cursor: pointer; padding: 14px 18px; font-family: var(--f-kod); font-size: 0.9rem; display: flex; gap: 14px; }
+.yedek summary .kod { color: var(--cyan); font-weight: 600; }
+.yedek-ic { display: grid; gap: 14px; padding: 4px 18px 22px; min-width: 0; }
 .akis { display: flex; flex-wrap: wrap; gap: 6px 4px; align-items: center; font-family: var(--f-kod); font-size: 0.82rem; }
 .akis span { border: 1px solid var(--cizgi); background: var(--yuzey); padding: 4px 10px; }
 .akis i { font-style: normal; color: var(--soluk); padding: 0 2px; }
@@ -131,12 +135,11 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
     <nav>
       <div><span class="etiket">1 · Kurulum</span>
         <ol>
-          <li><a href="#K1" data-nav="K1"><span class="kod">K1</span>Claude Code</a></li>
-          <li><a href="#K2" data-nav="K2"><span class="kod">K2</span>Eklentiler</a></li>
-          <li><a href="#A1" data-nav="A1"><span class="kod">A1</span>Araçlar</a></li>
-          <li><a href="#K3" data-nav="K3"><span class="kod">K3</span>Dizgi klasörü</a></li>
+          <li><a href="#K1" data-nav="K1"><span class="kod">K1</span>Tek satırla kur</a></li>
+          <li><a href="#K2" data-nav="K2"><span class="kod">K2</span>Aç ve giriş yap</a></li>
           <li><a href="#A2" data-nav="A2"><span class="kod">A2</span>Yayınevi kuralları</a></li>
           <li><a href="#A3" data-nav="A3"><span class="kod">A3</span>Deneme kitabı</a></li>
+          <li><a href="#Y"><span class="kod">Y</span>Elle kurulum</a></li>
         </ol></div>
       <div><span class="etiket">2 · Her kitapta</span>
         <ol>
@@ -168,47 +171,49 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
     <section class="bolum" id="kurulum">
       <div class="bolum-bas">
         <h2><span class="no">1</span>Kurulum</h2>
-        <p>Her bilgisayarda bir kez yapılır. Gerekenler: Windows 10 ya da 11, internet ve Claude Code içeren bir Claude hesabı (Pro, Max ya da Claude Code koltuklu Team / Enterprise). K ile başlayan adımlar PowerShell'e, A ile başlayanlar Claude Code'a yapıştırılır.</p>
+        <p>Her bilgisayarda bir kez yapılır. Gerekenler: Windows 10 ya da 11, internet ve her çalışan için Claude Code içeren bir Claude hesabı (Pro, Max ya da Claude Code koltuklu Team / Enterprise). K ile başlayan adımlar PowerShell'e, A ile başlayanlar Claude Code'a yapıştırılır.</p>
       </div>
 
       <article class="kart" id="K1"><span class="kesim"></span>
-        <div class="kart-bas"><span class="kod">K1</span><h3>Claude Code'u kurun ve giriş yapın</h3>
+        <div class="kart-bas"><span class="kod">K1</span><h3>Tek satırla kurun</h3>
           <label class="tik-etiket"><input type="checkbox" class="tik" data-kod="K1"> Yapıldı</label></div>
-        <p class="ne-zaman">Başlat menüsünden PowerShell'i açın, satırı yapıştırıp Enter'a basın. Bitince PowerShell'i kapatıp yeniden açın, <code>claude</code> yazın ve tarayıcıda açılan sayfadan Claude hesabınızla giriş yapın.</p>
+        <p class="ne-zaman">Başlat menüsünden <strong>PowerShell</strong>'i açın, satırı yapıştırıp Enter'a basın. Betik Claude Code'u, Git, Typst, Pandoc ve Python'u, Word/PDF ve dizgi eklentilerini kurar; Belgeler'de <strong>Dizgi</strong> klasörünü açar. 10–15 dakika sürebilir; Windows izin pencerelerine "Evet" deyin. Yüklü olanı yeniden kurmaz: yarıda kalırsa aynı satırı yeniden çalıştırın.</p>
         <div class="komutlar">
-          {{KOMUT:k-kur::Windows · PowerShell::irm https://claude.ai/install.ps1 | iex}}
-          {{KOMUT:k-dogrula::Doğrulama::claude --version}}
+          {{KOMUT:k-kur::Windows · PowerShell::irm https://raw.githubusercontent.com/ahmetmetintr/yayinevi-dizgi/main/kurulum/windows.ps1 | iex}}
         </div>
-        <p class="not">Terminal istemeyenler Claude masaüstü uygulamasındaki Code sekmesini de kullanabilir; eklentiler orada da çalışır. K2 için yine de PowerShell gerekir.</p>
+        <p class="not">Betik, winget paketlerini sözleşmelerini kabul ederek kurar. Ne yaptığını satır satır görmek için: <a href="https://github.com/ahmetmetintr/yayinevi-dizgi/blob/main/kurulum/windows.ps1">kurulum betiği</a>.</p>
       </article>
 
       <article class="kart" id="K2"><span class="kesim"></span>
-        <div class="kart-bas"><span class="kod">K2</span><h3>Eklentileri kurun</h3>
+        <div class="kart-bas"><span class="kod">K2</span><h3>Dizgi klasöründe açın ve giriş yapın</h3>
           <label class="tik-etiket"><input type="checkbox" class="tik" data-kod="K2"> Yapıldı</label></div>
-        <p class="ne-zaman">İki eklenti kurulur. <strong>Belge eklentisi</strong> (Anthropic) Claude'a Word ve PDF dosyalarıyla çalışmayı öğretir. <strong>Dizgi eklentisi</strong> yayınevine özel üç beceriyi getirir: <em>dizgi</em> (şablon, Türkçe tipografi, PDF kontrolü), <em>tashih</em> (hoca düzeltmeleri) ve <em>kapak</em>. Dört satırı PowerShell'de sırayla çalıştırın.</p>
+        <p class="ne-zaman">Kurulum penceresini kapatın, yeni bir PowerShell açın ve satırı yapıştırın. İlk açılışta tarayıcıda Claude hesabınızla giriş yapın; klasöre güvenip güvenmediğinizi sorarsa "Evet" deyin. Bundan sonra her çalışmaya bu satırla başlayın.</p>
         <div class="komutlar">
-          {{KOMUT:k-belge-pazar::1 · Belge pazarı::claude plugin marketplace add anthropics/skills}}
-          {{KOMUT:k-belge::2 · Belge eklentisi::claude plugin install document-skills@anthropic-agent-skills}}
-          {{KOMUT:k-dizgi-pazar::3 · Dizgi pazarı::claude plugin marketplace add ahmetmetintr/yayinevi-dizgi}}
-          {{KOMUT:k-dizgi::4 · Dizgi eklentisi::claude plugin install dizgi@yayinevi-dizgi}}
+          {{KOMUT:k-ac::Windows · PowerShell::cd ([Environment]::GetFolderPath('MyDocuments') + '\Dizgi'); claude}}
         </div>
-        <p class="not">Bilgisayar GitHub'a erişemiyorsa eğitmenin getirdiği klasörden kurun: 3. satırda adres yerine klasörün yolunu yazın, örneğin <code>claude plugin marketplace add "D:\yayinevi-dizgi"</code>.</p>
-      </article>
-
-      {{KART:A1|Bilgisayarı dizgiye hazırla|PowerShell'de <code>claude</code> yazıp açın ve yapıştırın. Git, Typst, Pandoc ve Python'u kurar; Belgeler'de <strong>Dizgi</strong> klasörünü açar ve içine yayınevi kuralları ile Claude'un her açılışta okuduğu <code>CLAUDE.md</code> notunu koyar.}}
-
-      <article class="kart" id="K3"><span class="kesim"></span>
-        <div class="kart-bas"><span class="kod">K3</span><h3>Claude Code'u Dizgi klasöründe açın</h3>
-          <label class="tik-etiket"><input type="checkbox" class="tik" data-kod="K3"> Yapıldı</label></div>
-        <p class="ne-zaman">Claude Code'dan çıkın (iki kez Ctrl+C) ve Dizgi klasöründe yeniden açın. Bundan sonra her çalışmaya böyle başlayın. Belgeler OneDrive'daysa A1'in sonunda Claude'un yazdığı yolu kullanın.</p>
-        <div class="komutlar">
-          {{KOMUT:k-ac::Windows · PowerShell::cd "$HOME\Documents\Dizgi"; claude}}
-        </div>
+        <p class="not">Terminal istemeyenler Claude masaüstü uygulamasının Code sekmesinde Belgeler\Dizgi klasörünü seçerek çalışabilir; eklentiler orada da çalışır.</p>
       </article>
 
       {{KART:A2|Yayınevimizin kurallarını öğren|Claude soru sorarak ölçüleri, yazı tipini, çizgi ve tırnak tercihlerini, kapak ve düzeltme alışkanlıklarını kaydeder. Bir kez yapılır; sonraki bütün kitaplar bu kurallarla dizilir.}}
       {{KART:A2b|Kuralları bastığımız bir kitaptan çıkar|A2'nin yerine kullanılabilir. Daha önce bastığınız bir kitabın PDF'ini önce <code>Dizgi\ornek</code> klasörüne koyun.}}
       {{KART:A3|Kurulumu bir deneme kitabıyla sına|Claude kendi yazdığı kısa bir metni baştan sona dizer, sonra bir hocanın yapacağı gibi PDF'e düzeltme işaretleri koyup tashih akışını da dener.}}
+
+      <details class="yedek" id="Y">
+        <summary><span class="kod">Y</span>Betik çalışmazsa: elle kurulum</summary>
+        <div class="yedek-ic">
+          <p class="ne-zaman">1. Claude Code'u kurun; bitince PowerShell'i kapatıp açın.</p>
+          <div class="komutlar">{{KOMUT:k-elle-claude::Windows · PowerShell::irm https://claude.ai/install.ps1 | iex}}</div>
+          <p class="ne-zaman">2. Eklentileri kurun: dört satırı sırayla çalıştırın. Bilgisayar GitHub'a erişemiyorsa 3. satırda adres yerine eğitmenin getirdiği klasörün yolunu yazın, örneğin <code>"D:\yayinevi-dizgi"</code>.</p>
+          <div class="komutlar">
+            {{KOMUT:k-belge-pazar::1 · Belge pazarı::claude plugin marketplace add anthropics/skills}}
+            {{KOMUT:k-belge::2 · Belge eklentisi::claude plugin install document-skills@anthropic-agent-skills}}
+            {{KOMUT:k-dizgi-pazar::3 · Dizgi pazarı::claude plugin marketplace add ahmetmetintr/yayinevi-dizgi}}
+            {{KOMUT:k-dizgi::4 · Dizgi eklentisi::claude plugin install dizgi@yayinevi-dizgi}}
+          </div>
+          <p class="ne-zaman">3. <code>claude</code> yazıp açın, giriş yapın ve araçları Claude'a kurdurun:</p>
+          {{KART:A1|Bilgisayarı dizgiye hazırla|PowerShell'de <code>claude</code> yazıp açın ve yapıştırın. Git, Typst, Pandoc ve Python'u kurar; Belgeler'de <strong>Dizgi</strong> klasörünü açar ve içine yayınevi kuralları ile Claude'un her açılışta okuduğu <code>CLAUDE.md</code> notunu koyar.}}
+        </div>
+      </details>
     </section>
 
     <section class="bolum" id="kitap">

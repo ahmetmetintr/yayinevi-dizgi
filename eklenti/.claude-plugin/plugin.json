@@ -1,8 +1,17 @@
 {
   "name": "dizgi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Kitap iç sayfa dizgisi: Word dosyasından Typst ile baskıya hazır PDF, Türkçe tipografi düzeltmesi, PDF kontrolü, tashih ve matbaa hazırlığı.",
-  "author": { "name": "ahmetmetintr" },
+  "author": {
+    "name": "ahmetmetintr"
+  },
   "repository": "https://github.com/ahmetmetintr/yayinevi-dizgi",
-  "keywords": ["dizgi", "typesetting", "typst", "türkçe", "yayınevi"]
+  "keywords": [
+    "dizgi",
+    "typesetting",
+    "typst",
+    "türkçe",
+    "yayınevi"
+  ],
+  "license": "MIT"
 }

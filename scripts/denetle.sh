@@ -10,6 +10,6 @@ while IFS= read -r dosya; do
   satir=$(wc -l < "$dosya"); sinir=400
   case "$dosya" in testler/test_*) sinir=600 ;; esac
   if [ "$satir" -gt "$sinir" ]; then echo "$dosya: $satir satır (sınır $sinir)"; asim=1; fi
-done < <(find eklenti egitim testler scripts -type f \( -name '*.py' -o -name '*.typ' -o -name '*.html' -o -name '*.sh' \) -not -path '*/__pycache__/*')
+done < <(find eklenti egitim testler scripts kurulum -type f \( -name '*.py' -o -name '*.typ' -o -name '*.html' -o -name '*.sh' -o -name '*.ps1' \) -not -path '*/__pycache__/*')
 [ "$asim" -eq 0 ] && echo "dosya boyutları sınırda"
 exit "$asim"

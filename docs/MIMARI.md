@@ -13,6 +13,7 @@ kopyala-yapıştır promptlarla anlatan **eğitim sayfası**. Depo aynı zamanda
 | `eklenti/skills/dizgi/` | Kitap dizgisi: `SKILL.md`, `sablon/` (kitap.typ, ana-dosya.typ, yayinevi.md kural şablonu), `araclar/` (tipografi.py, pdf_kontrol.py) | Hiçbir şeye |
 | `eklenti/skills/tashih/` | Düzeltme turları: `araclar/` (tashih_oku.py, tashih_uygula.py, tashih_rapor.py) | Hiçbir şeye |
 | `eklenti/skills/kapak/` | Kapak: `sablon/kapak.typ` (ölçü), `araclar/kapak_kutulari.py` | Hiçbir şeye |
+| `kurulum/` | Windows kurulum betiği (`windows.ps1`, `irm … \| iex` ile) ve çalışma klasörüne konan `CLAUDE.md` şablonu | GitHub'daki `main` dalı (ham dosya adresleri) |
 | `egitim/` | Eğitim sayfası: `sayfa.html` iskelet, `promptlar/KOD-ad.md`, `uret.py` | `eklenti/.claude-plugin/plugin.json` (sürüm) |
 | `testler/` | Birim testleri, örnek kitap ve örnek kapak | `eklenti/` |
 | `scripts/denetle.sh` | Tek denetim komutu | hepsi |

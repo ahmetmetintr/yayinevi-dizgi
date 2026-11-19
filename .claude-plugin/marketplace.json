@@ -1,0 +1,15 @@
+{
+  "name": "yayinevi-dizgi",
+  "owner": { "name": "ahmetmetintr" },
+  "metadata": {
+    "description": "Claude Code ile Türkçe kitap dizgisi: Typst şablonu, Türkçe tipografi düzeltmesi, baskı öncesi kontrol.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "dizgi",
+      "source": "./eklenti",
+      "description": "Word dosyasından baskıya hazır PDF: kitap şablonu, Türkçe tipografi, PDF kontrolü, tashih ve matbaa hazırlığı."
+    }
+  ]
+}

@@ -1,0 +1,311 @@
+<title>Claude Code ile Dizgi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400&display=swap">
+<style>
+/* Düzen: dizgi provası — solda adım dizini, sağda kesim işaretli prompt kartları; vurgu rengi baskı mavisi (cyan) */
+:root {
+  --kagit: #F4F6F8; --yuzey: #FFFFFF; --murekkep: #13171C; --soluk: #59626F; --cizgi: #D5DBE3;
+  --cyan: #0072A8; --cyan-zemin: #E4F1F8; --magenta: #B0135C; --yesil: #1C7449; --kod-zemin: #EEF1F5;
+  --f-yazi: "Literata", Georgia, "Times New Roman", serif;
+  --f-kod: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --olcek-1: clamp(2.3rem, 1.6rem + 3vw, 3.6rem); --olcek-2: 1.65rem; --olcek-3: 1.18rem;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --kagit: #0F1318; --yuzey: #161B22; --murekkep: #E6EAF0; --soluk: #9AA4B2; --cizgi: #2B333E;
+  --cyan: #4DB6E8; --cyan-zemin: #13293A; --magenta: #F07AAE; --yesil: #5CC98F; --kod-zemin: #1B2129; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --kagit: #0F1318; --yuzey: #161B22; --murekkep: #E6EAF0; --soluk: #9AA4B2; --cizgi: #2B333E;
+  --cyan: #4DB6E8; --cyan-zemin: #13293A; --magenta: #F07AAE; --yesil: #5CC98F; --kod-zemin: #1B2129; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body { background: var(--kagit); color: var(--murekkep); font-family: var(--f-yazi); font-size: 17px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0; }
+a { color: var(--cyan); }
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+h1, h2, h3 { text-wrap: balance; line-height: 1.2; margin: 0; }
+.etiket { font-family: var(--f-kod); font-size: 0.74rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--soluk); }
+
+.cerceve { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 56px; padding-block: 40px 80px; }
+
+/* Kapak */
+.kapak { grid-column: 1 / -1; position: relative; padding: 36px 34px 30px; background: var(--yuzey); border: 1px solid var(--cizgi); }
+.kapak h1 { font-size: var(--olcek-1); font-weight: 650; letter-spacing: -0.01em; margin-top: 10px; }
+.kapak .giris { max-width: 62ch; margin: 14px 0 0; color: var(--soluk); font-size: 1.06rem; }
+.ayar { position: absolute; top: 22px; right: 24px; width: 30px; height: 30px; color: var(--soluk); }
+.is-emri { display: flex; flex-wrap: wrap; margin-top: 26px; border-top: 1px solid var(--cizgi); }
+.is-emri div { padding: 12px 22px 0 0; margin-right: 22px; min-width: 0; }
+.is-emri dt { font-family: var(--f-kod); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--soluk); }
+.is-emri dd { margin: 2px 0 0; font-family: var(--f-kod); font-size: 0.95rem; font-weight: 500; font-variant-numeric: tabular-nums; }
+
+/* Dizin */
+.dizin { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); align-self: start; font-family: var(--f-kod); font-size: 0.82rem; }
+.dizin ol { list-style: none; margin: 6px 0 20px; padding: 0; display: grid; gap: 2px; }
+.dizin a { display: flex; gap: 10px; padding: 3px 6px; margin-left: -6px; color: var(--murekkep); text-decoration: none; border-radius: 3px; }
+.dizin a:hover { background: var(--cyan-zemin); }
+.dizin a .kod { color: var(--soluk); min-width: 2.6em; }
+.dizin a.yapildi .kod { color: var(--yesil); }
+.dizin a.yapildi .kod::after { content: " ✓"; }
+
+/* Bölümler */
+main { min-width: 0; display: grid; gap: 64px; }
+.bolum { display: grid; gap: 26px; }
+.bolum-bas { display: grid; gap: 8px; max-width: 66ch; }
+.bolum-bas h2 { font-size: var(--olcek-2); font-weight: 650; }
+.bolum-bas h2 .no { color: var(--cyan); font-family: var(--f-kod); font-weight: 500; margin-right: 10px; }
+.bolum-bas p { margin: 0; color: var(--soluk); }
+.adimlar { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; max-width: 66ch; }
+
+/* Prompt kartı: kesim işaretli prova */
+.kart { position: relative; background: var(--yuzey); border: 1px solid var(--cizgi); padding: 22px 24px 24px; display: grid; gap: 12px; min-width: 0; scroll-margin-top: 24px; }
+.kesim { position: absolute; inset: -9px; pointer-events: none; --c: var(--soluk);
+  background:
+    linear-gradient(var(--c), var(--c)) top left / 8px 1px no-repeat, linear-gradient(var(--c), var(--c)) top left / 1px 8px no-repeat,
+    linear-gradient(var(--c), var(--c)) top right / 8px 1px no-repeat, linear-gradient(var(--c), var(--c)) top right / 1px 8px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom left / 8px 1px no-repeat, linear-gradient(var(--c), var(--c)) bottom left / 1px 8px no-repeat,
+    linear-gradient(var(--c), var(--c)) bottom right / 8px 1px no-repeat, linear-gradient(var(--c), var(--c)) bottom right / 1px 8px no-repeat; }
+.kart.yapildi { border-color: var(--yesil); }
+.kart-bas { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.kart-bas .kod { font-family: var(--f-kod); font-weight: 600; color: var(--cyan); font-size: 0.95rem; }
+.kart-bas h3 { font-size: var(--olcek-3); font-weight: 600; flex: 1 1 16ch; }
+.tik-etiket { font-family: var(--f-kod); font-size: 0.78rem; color: var(--soluk); display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.tik-etiket input { accent-color: var(--yesil); width: 16px; height: 16px; }
+.ne-zaman { margin: 0; color: var(--soluk); max-width: 70ch; }
+.not { margin: 0; font-size: 0.92rem; color: var(--soluk); border-left: 2px solid var(--magenta); padding-left: 12px; max-width: 70ch; }
+
+.metin-kutu { position: relative; background: var(--kod-zemin); border: 1px solid var(--cizgi); min-width: 0; }
+.metin-kutu pre { margin: 0; padding: 16px 18px 18px; font-family: var(--f-kod); font-size: 0.83rem; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--murekkep); }
+.metin-kutu.uzun pre { max-height: 300px; overflow: hidden; }
+.metin-kutu.uzun.acik pre { max-height: none; }
+.metin-kutu.uzun:not(.acik)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 90px; background: linear-gradient(transparent, var(--kod-zemin)); pointer-events: none; }
+.arac-cubugu { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 10px 8px 18px; border-bottom: 1px solid var(--cizgi); flex-wrap: wrap; }
+.arac-cubugu .dugmeler { display: flex; gap: 8px; }
+button { font: 500 0.8rem var(--f-kod); border-radius: 3px; cursor: pointer; padding: 7px 14px; }
+.kopyala { background: var(--cyan); color: var(--yuzey); border: 1px solid var(--cyan); }
+.kopyala.oldu { background: var(--yesil); border-color: var(--yesil); }
+.ac-kapa { background: transparent; color: var(--murekkep); border: 1px solid var(--cizgi); }
+
+.komutlar { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+.komutlar .metin-kutu pre { font-size: 0.85rem; padding: 12px 18px 14px; }
+
+.akis { display: flex; flex-wrap: wrap; gap: 6px 4px; align-items: center; font-family: var(--f-kod); font-size: 0.82rem; }
+.akis span { border: 1px solid var(--cizgi); background: var(--yuzey); padding: 4px 10px; }
+.akis i { font-style: normal; color: var(--soluk); padding: 0 2px; }
+
+.bilgi { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 0 40px; }
+.bilgi div { border-top: 1px solid var(--cizgi); padding: 14px 0 18px; min-width: 0; }
+.bilgi h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+.bilgi p { margin: 0; color: var(--soluk); font-size: 0.95rem; }
+code { font-family: var(--f-kod); font-size: 0.86em; background: var(--kod-zemin); padding: 1px 5px; border-radius: 3px; }
+footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 18px; color: var(--soluk); font-size: 0.85rem; }
+
+@media (max-width: 900px) {
+  .cerceve { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-block: 20px 56px; }
+  .kapak { padding: 26px 20px 22px; }
+  .dizin { position: static; overflow-x: auto; }
+  .dizin nav { display: flex; gap: 24px; min-width: max-content; }
+  .dizin ol { grid-auto-flow: column; gap: 4px; margin-bottom: 4px; }
+  .kart { padding: 18px 16px 20px; }
+}
+@media (prefers-reduced-motion: no-preference) { .kopyala, .dizin a { transition: background-color .15s ease; } }
+</style>
+
+<div class="cerceve">
+  <header class="kapak">
+    <svg class="ayar" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="8" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="15" cy="15" r="4" fill="none" stroke="currentColor" stroke-width="1"/><path d="M15 0v30M0 15h30" stroke="currentColor" stroke-width="1"/></svg>
+    <span class="etiket">Yayınevi eğitimi · kopyala, yapıştır, diz</span>
+    <h1>Claude Code ile Dizgi</h1>
+    <p class="giris">Yazarın Word dosyasından baskıya hazır PDF'e, hocanın düzeltmelerinden kapağa kadar bütün iş bu sayfadaki hazır metinlerle yapılır. Her kartta bir prompt var: <strong>Kopyala</strong>'ya basın, Claude Code'a yapıştırın, Enter'a basın. Claude gerekirse soru sorar; cevaplayın.</p>
+    <dl class="is-emri">
+      <div><dt>Kesim</dt><dd>135 × 210 mm</dd></div>
+      <div><dt>Dizgi motoru</dt><dd>Typst</dd></div>
+      <div><dt>Forma</dt><dd>16 sayfa</dd></div>
+      <div><dt>İç baskı</dt><dd>1 renk</dd></div>
+      <div><dt>Kapak</dt><dd>CMYK · 3 mm taşma</dd></div>
+      <div><dt>Sistem</dt><dd>Windows</dd></div>
+    </dl>
+  </header>
+
+  <aside class="dizin" aria-label="Adımlar">
+    <nav>
+      <div><span class="etiket">1 · Kurulum</span>
+        <ol>
+          <li><a href="#K1" data-nav="K1"><span class="kod">K1</span>Claude Code</a></li>
+          <li><a href="#K2" data-nav="K2"><span class="kod">K2</span>Eklentiler</a></li>
+          <li><a href="#A1" data-nav="A1"><span class="kod">A1</span>Araçlar</a></li>
+          <li><a href="#K3" data-nav="K3"><span class="kod">K3</span>Dizgi klasörü</a></li>
+          <li><a href="#A2" data-nav="A2"><span class="kod">A2</span>Yayınevi kuralları</a></li>
+          <li><a href="#A3" data-nav="A3"><span class="kod">A3</span>Deneme kitabı</a></li>
+        </ol></div>
+      <div><span class="etiket">2 · Her kitapta</span>
+        <ol>
+          <li><a href="#B1" data-nav="B1"><span class="kod">B1</span>Yeni kitap</a></li>
+          <li><a href="#B2" data-nav="B2"><span class="kod">B2</span>Word'ü al</a></li>
+          <li><a href="#B3" data-nav="B3"><span class="kod">B3</span>Tipografi</a></li>
+          <li><a href="#B4" data-nav="B4"><span class="kod">B4</span>Diz</a></li>
+          <li><a href="#B5" data-nav="B5"><span class="kod">B5</span>Kontrol</a></li>
+          <li><a href="#B6" data-nav="B6"><span class="kod">B6</span>Hoca düzeltmeleri</a></li>
+          <li><a href="#B7" data-nav="B7"><span class="kod">B7</span>Matbaa</a></li>
+        </ol></div>
+      <div><span class="etiket">3 · Kapak</span>
+        <ol>
+          <li><a href="#D1" data-nav="D1"><span class="kod">D1</span>Kapak önerileri</a></li>
+          <li><a href="#D2" data-nav="D2"><span class="kod">D2</span>Tam kapak</a></li>
+        </ol></div>
+      <div><span class="etiket">4 · InDesign</span>
+        <ol>
+          <li><a href="#C1" data-nav="C1"><span class="kod">C1</span>Word'ü hazırla</a></li>
+          <li><a href="#C2" data-nav="C2"><span class="kod">C2</span>GREP sorguları</a></li>
+          <li><a href="#C3" data-nav="C3"><span class="kod">C3</span>Betik</a></li>
+        </ol></div>
+      <div><span class="etiket">5</span>
+        <ol><li><a href="#bilgi"><span class="kod">i</span>Bilmeniz gerekenler</a></li></ol></div>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="bolum" id="kurulum">
+      <div class="bolum-bas">
+        <h2><span class="no">1</span>Kurulum</h2>
+        <p>Her bilgisayarda bir kez yapılır. Gerekenler: Windows 10 ya da 11, internet ve Claude Code içeren bir Claude hesabı (Pro, Max ya da Claude Code koltuklu Team / Enterprise). K ile başlayan adımlar PowerShell'e, A ile başlayanlar Claude Code'a yapıştırılır.</p>
+      </div>
+
+      <article class="kart" id="K1"><span class="kesim"></span>
+        <div class="kart-bas"><span class="kod">K1</span><h3>Claude Code'u kurun ve giriş yapın</h3>
+          <label class="tik-etiket"><input type="checkbox" class="tik" data-kod="K1"> Yapıldı</label></div>
+        <p class="ne-zaman">Başlat menüsünden PowerShell'i açın, satırı yapıştırıp Enter'a basın. Bitince PowerShell'i kapatıp yeniden açın, <code>claude</code> yazın ve tarayıcıda açılan sayfadan Claude hesabınızla giriş yapın.</p>
+        <div class="komutlar">
+          {{KOMUT:k-kur::Windows · PowerShell::irm https://claude.ai/install.ps1 | iex}}
+          {{KOMUT:k-dogrula::Doğrulama::claude --version}}
+        </div>
+        <p class="not">Terminal istemeyenler Claude masaüstü uygulamasındaki Code sekmesini de kullanabilir; eklentiler orada da çalışır. K2 için yine de PowerShell gerekir.</p>
+      </article>
+
+      <article class="kart" id="K2"><span class="kesim"></span>
+        <div class="kart-bas"><span class="kod">K2</span><h3>Eklentileri kurun</h3>
+          <label class="tik-etiket"><input type="checkbox" class="tik" data-kod="K2"> Yapıldı</label></div>
+        <p class="ne-zaman">İki eklenti kurulur. <strong>Belge eklentisi</strong> (Anthropic) Claude'a Word ve PDF dosyalarıyla çalışmayı öğretir. <strong>Dizgi eklentisi</strong> yayınevine özel üç beceriyi getirir: <em>dizgi</em> (şablon, Türkçe tipografi, PDF kontrolü), <em>tashih</em> (hoca düzeltmeleri) ve <em>kapak</em>. Dört satırı PowerShell'de sırayla çalıştırın.</p>
+        <div class="komutlar">
+          {{KOMUT:k-belge-pazar::1 · Belge pazarı::claude plugin marketplace add anthropics/skills}}
+          {{KOMUT:k-belge::2 · Belge eklentisi::claude plugin install document-skills@anthropic-agent-skills}}
+          {{KOMUT:k-dizgi-pazar::3 · Dizgi pazarı::claude plugin marketplace add ahmetmetintr/yayinevi-dizgi}}
+          {{KOMUT:k-dizgi::4 · Dizgi eklentisi::claude plugin install dizgi@yayinevi-dizgi}}
+        </div>
+        <p class="not">Bilgisayar GitHub'a erişemiyorsa eğitmenin getirdiği klasörden kurun: 3. satırda adres yerine klasörün yolunu yazın, örneğin <code>claude plugin marketplace add "D:\yayinevi-dizgi"</code>.</p>
+      </article>
+
+      {{KART:A1|Bilgisayarı dizgiye hazırla|PowerShell'de <code>claude</code> yazıp açın ve yapıştırın. Git, Typst, Pandoc ve Python'u kurar; Belgeler'de <strong>Dizgi</strong> klasörünü açar ve içine yayınevi kuralları ile Claude'un her açılışta okuduğu <code>CLAUDE.md</code> notunu koyar.}}
+
+      <article class="kart" id="K3"><span class="kesim"></span>
+        <div class="kart-bas"><span class="kod">K3</span><h3>Claude Code'u Dizgi klasöründe açın</h3>
+          <label class="tik-etiket"><input type="checkbox" class="tik" data-kod="K3"> Yapıldı</label></div>
+        <p class="ne-zaman">Claude Code'dan çıkın (iki kez Ctrl+C) ve Dizgi klasöründe yeniden açın. Bundan sonra her çalışmaya böyle başlayın. Belgeler OneDrive'daysa A1'in sonunda Claude'un yazdığı yolu kullanın.</p>
+        <div class="komutlar">
+          {{KOMUT:k-ac::Windows · PowerShell::cd "$HOME\Documents\Dizgi"; claude}}
+        </div>
+      </article>
+
+      {{KART:A2|Yayınevimizin kurallarını öğren|Claude soru sorarak ölçüleri, yazı tipini, çizgi ve tırnak tercihlerini, kapak ve düzeltme alışkanlıklarını kaydeder. Bir kez yapılır; sonraki bütün kitaplar bu kurallarla dizilir.}}
+      {{KART:A2b|Kuralları bastığımız bir kitaptan çıkar|A2'nin yerine kullanılabilir. Daha önce bastığınız bir kitabın PDF'ini önce <code>Dizgi\ornek</code> klasörüne koyun.}}
+      {{KART:A3|Kurulumu bir deneme kitabıyla sına|Claude kendi yazdığı kısa bir metni baştan sona dizer, sonra bir hocanın yapacağı gibi PDF'e düzeltme işaretleri koyup tashih akışını da dener.}}
+    </section>
+
+    <section class="bolum" id="kitap">
+      <div class="bolum-bas">
+        <h2><span class="no">2</span>Bir kitabı dizmek</h2>
+        <p>Her kitapta bu sırayla ilerleyin. Yazarın dosyası <code>kaynak</code> klasöründe hiç değişmeden kalır; Claude yazarın sözcüklerine dokunmaz, yalnız noktalama ve boşluğu düzeltir ve bunu her seferinde harf harf doğrular.</p>
+      </div>
+      <div class="akis" aria-label="İş akışı"><span>Word</span><i>→</i><span>metin.typ</span><i>→</i><span>tipografi</span><i>→</i><span>PDF</span><i>→</i><span>kontrol</span><i>→</i><span>hoca düzeltmesi</span><i>→</i><span>matbaa</span></div>
+      {{KART:B1|Yeni kitap aç|Kitabın klasörünü, şablonunu ve künyesini hazırlar.}}
+      {{KART:B2|Word dosyasını içeri al|Önce Word dosyasını kitabın <code>kaynak</code> klasörüne kopyalayın. Claude dosyayı dönüştürür ve başlık, dipnot, görsel sayılarını Word'le karşılaştırır.}}
+      {{KART:B3|Türkçe tipografi düzeltmesi|Tırnak, kesme işareti, kısa ve uzun çizgi, üç nokta, çift boşluk, yüzde işareti ve bölünmez boşluklar. Önce rapor gelir; siz onaylamadan dosya değişmez.}}
+      {{KART:B4|Diz ve PDF üret|İç kapak, künye, içindekiler, sağ sayfada açılan bölümler, üst bilgi ve sayfa numaraları şablondan gelir.}}
+      {{KART:B5|Baskı öncesi kontrol|Ölçü, forma, gömülü yazı tipleri, eksik Türkçe harf yüzünden kayan yazı tipi, tek renk baskıda renkli içerik, tire merdiveni, doldurulmamış künye.}}
+      {{KART:B6|Hocanın düzeltmelerini işle|İşaretli PDF (üstü çizili, ekleme imi, not, el yazısı), izli ya da yorumlu Word ve e-postayla gelen listeler okunur. Yalnız tek ve kesin yere oturan düzeltme uygulanır; gerisi hocaya kısa soru olarak döner. Önceki turların kaybolmadığı her turda denetlenir.}}
+      {{KART:B7|Matbaaya hazırla|Künye, forma tamamlama, son kontrol ve teslim notu.}}
+    </section>
+
+    <section class="bolum" id="kapak">
+      <div class="bolum-bas">
+        <h2><span class="no">3</span>Kapak</h2>
+        <p>Claude kitabı okuyup kapak fikrini kitabın kendi malzemesinden çıkarır ve birbirinden farklı dört yön eskizler. Yapay zekâ görseli, stok fotoğraf ve türün klişeleri kullanılmaz; çizimler elle kurulur, yazı tipleri lisanslıdır.</p>
+      </div>
+      {{KART:D1|Kapak önerileri|Dört eskiz, her birinin gerekçesi ve bir öneri. Eskizler internet kitapçısındaki küçük boyda da sınanır.}}
+      {{KART:D2|Tam kapak|Seçilen yön ön, sırt ve arka olarak baskıya hazırlanır: sırt kalınlığı sayfa sayısından, 3 mm taşma payı, CMYK renk, kesim kutuları.}}
+    </section>
+
+    <section class="bolum" id="indesign">
+      <div class="bolum-bas">
+        <h2><span class="no">4</span>InDesign kullananlar için</h2>
+        <p>Dizgiyi InDesign'da sürdürecekseniz Claude Code metni hazırlar ve InDesign'ın tekrar eden işlerini otomatikleştirir. Bu promptlar InDesign'ı açmaz; dosya ve betik üretir.</p>
+      </div>
+      {{KART:C1|Word metnini InDesign'a hazırla|Tutarlı paragraf stilleri ve Türkçe tipografi düzeltmesiyle temiz bir .docx kopyası.}}
+      {{KART:C2|GREP Bul/Değiştir sorguları|Türkçe tipografi kurallarını InDesign'ın GREP sözdizimiyle tablo hâlinde verir.}}
+      {{KART:C3|InDesign betiği yazdır|Örnek: bütün stillere Türkçe dil, sözcük bölme ve satır tutma ayarı. Promptu kendi işinize göre değiştirebilirsiniz.}}
+    </section>
+
+    <section class="bolum" id="bilgi">
+      <div class="bolum-bas"><h2><span class="no">5</span>Bilmeniz gerekenler</h2></div>
+      <div class="bilgi">
+        <div><h3>İzin istekleri</h3><p>Claude dosya yazmadan ve komut çalıştırmadan önce izin ister. İsteği okuyun; ne yaptığını anlamıyorsanız "Hayır" deyip sorun. Durdurmak için Esc'e basın.</p></div>
+        <div><h3>Bir konu, bir oturum</h3><p>Yeni bir kitaba ya da başka bir işe geçerken <code>/clear</code> yazın. Claude Code'u her zaman Dizgi klasöründe açın.</p></div>
+        <div><h3>Beceriler kendiliğinden devreye girer</h3><p>"Dizgi", "düzeltmeler geldi", "kapak" gibi sözler ilgili beceriyi çağırır. Emin olmak için prompta "dizgi skill'ini kullan" ekleyin.</p></div>
+        <div><h3>Yazarın metni</h3><p>Claude sözcüklere dokunmaz; yazım hatası görürse düzeltmez, <code>NOTLAR.md</code>'deki tashih önerilerine yazar. Karar editöründür.</p></div>
+        <div><h3>Güncelleme</h3><p>Eğitmen eklentiyi geliştirdiğinde PowerShell'de <code>claude plugin marketplace update yayinevi-dizgi</code>, ardından <code>claude plugin update dizgi@yayinevi-dizgi</code> çalıştırın. Sonra Claude Code'u kapatıp açın. Yayınevi kuralları Dizgi klasöründe durduğu için güncellemede kaybolmaz.</p></div>
+        <div><h3>Gizlilik</h3><p>Metinler Anthropic'in sunucularında işlenir. Pro ve Max hesaplarında gizlilik ayarlarındaki model eğitimi seçeneği ("Help improve Claude") açıksa veriler eğitimde kullanılabilir; yayımlanmamış eserler için kapatın ya da Team / Enterprise kullanın. Yazar sözleşmesindeki gizlilik maddesine bakın.</p></div>
+        <div><h3>Son göz insanındır</h3><p>Kontrol araçları ölçü, yazı tipi ve renk gibi ölçülebilir hataları yakalar. Dul satır, görsel yerleşimi, kapak ve genel görünüm için baskıdan önce bir dizgici ve editör mutlaka bakmalı.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Dizgi eklentisi sürüm {{SURUM}} · Windows 10/11 · Typst 0.13 ve üstü, Pandoc, Python 3. Adımlardaki "Yapıldı" işaretleri yalnız bu tarayıcıda saklanır.</footer>
+</div>
+
+<script>
+(function () {
+  var ANAHTAR = "dizgi-egitimi-tikler";
+  var tikler = {};
+  try { tikler = JSON.parse(localStorage.getItem(ANAHTAR) || "{}") || {}; } catch (e) { tikler = {}; }
+  function kaydet() { try { localStorage.setItem(ANAHTAR, JSON.stringify(tikler)); } catch (e) {} }
+  function isaretle(kod, durum) {
+    document.querySelectorAll('[data-nav="' + kod + '"]').forEach(function (a) { a.classList.toggle("yapildi", durum); });
+    var kart = document.getElementById(kod);
+    if (kart) kart.classList.toggle("yapildi", durum);
+  }
+  document.querySelectorAll("input.tik").forEach(function (kutu) {
+    var kod = kutu.dataset.kod;
+    kutu.checked = !!tikler[kod];
+    isaretle(kod, kutu.checked);
+    kutu.addEventListener("change", function () { tikler[kod] = kutu.checked; kaydet(); isaretle(kod, kutu.checked); });
+  });
+  document.querySelectorAll("button.kopyala").forEach(function (dugme) {
+    dugme.addEventListener("click", function () {
+      var hedef = document.getElementById(dugme.dataset.hedef);
+      var metin = hedef.textContent;
+      function bildir(yazi) {
+        dugme.textContent = yazi; dugme.classList.add("oldu");
+        setTimeout(function () { dugme.textContent = "Kopyala"; dugme.classList.remove("oldu"); }, 2200);
+      }
+      function sec() {
+        var aralik = document.createRange(); aralik.selectNodeContents(hedef);
+        var secim = window.getSelection(); secim.removeAllRanges(); secim.addRange(aralik);
+        var oldu = false;
+        try { oldu = document.execCommand("copy"); } catch (e) {}
+        bildir(oldu ? "Kopyalandı" : "Seçildi · Ctrl+C");
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(metin).then(function () { bildir("Kopyalandı"); }, sec);
+      } else { sec(); }
+    });
+  });
+  document.querySelectorAll("button.ac-kapa").forEach(function (dugme) {
+    dugme.addEventListener("click", function () {
+      var kutu = document.getElementById(dugme.dataset.hedef);
+      var acik = kutu.classList.toggle("acik");
+      dugme.textContent = acik ? "Kısalt" : "Tamamını göster";
+      dugme.setAttribute("aria-expanded", acik ? "true" : "false");
+    });
+  });
+})();
+</script>

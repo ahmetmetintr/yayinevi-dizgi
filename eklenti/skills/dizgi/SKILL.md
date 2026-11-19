@@ -8,7 +8,13 @@ description: Kitap iç sayfa dizgisi ve baskı öncesi hazırlık. Word (.docx) 
 ## Altın kural: yazarın metnine dokunma
 
 - Sözcük değiştirme, yazım düzeltme, kısaltma, "iyileştirme" yok. Yazım hatası ya da tutarsızlık görürsen
-  düzeltme: kitabın `NOTLAR.md` dosyasındaki "Tashih önerileri" listesine yaz ve kullanıcıya göster.
+  düzeltme: kitabın `NOTLAR.md` dosyasındaki "Tashih önerileri" listesine yaz ve kullanıcıya göster. Bütün metnin
+  imla taraması `imla` becerisinin işidir (rapor + sarı işaretli prova; metne yazmaz).
+- Şekil ve tablo yazısı biçimdir, metin değil: etiket yayınevi biçimine getirilir. Vizetek: kalın "Tablo 1." /
+  "Şekil 1." (noktalı; telifte "Tablo 2.1."), ardından boşluk ve düz başlık; tablo yazısı üstte sola yaslı, şekil
+  yazısı altta ortalı, 10 pt italik. Yazarın "Tablo 1", "Tablo 1:", "Şekil 3:Başlık" yazımları buna getirilir;
+  Typst'in kendi numarası kapatılır (`#figure(numbering: none, …)`), yoksa "Şekil 1. Şekil 1:" çift basılır.
+  Etiket sözcüğünü (Resim, Figür → Şekil) değiştirmek metin içi atıflara da dokunur: kullanıcıya sor.
 - Noktalama ve boşluk düzeltmesini elle değil `araclar/tipografi.py` ile yap. Betik harf dizisi ya da Typst
   yapısı değişecekse dosyaya yazmaz.
 - Yazarın dosyaları `kaynak/` klasöründe kalır ve hiç değiştirilmez.
@@ -58,7 +64,9 @@ Kitap-Adi/
    **Editörlü kitap:** `kaynak/` içinde bölüm başına bir Word olur. Her birini `metin/bolum-NN.typ`'ye çevir
    (sırayı editöre sor). Her bölümün başındaki başlık ve yazar satırlarını `#bolum([Başlık], aciklama: […],
    yazarlar: (("Ad SOYAD", [Unvan, Kurum, Bölüm. ORCID: …, e-posta]), …))` biçimine, sonundaki kaynak listesini
-   `#kaynakca[ … ]` bloğuna al (her kaynak ayrı paragraf). Yazar bilgisi Word'de dipnottaysa oradan al; eksik
+   `#kaynakca[ … ]` bloğuna al (her kaynak ayrı paragraf). Kaynakça bölüm sonunda **yeni sayfadan** başlar
+   (`#kaynakca` bunu kendisi yapar; metin biter bitmez kaynakçaya geçilmez). Bir bölümde birkaç yazı ve
+   kaynakça varsa her biri `#kaynakca(baslik: [Kaynaklar], duzey: 3)[…]` olur. Yazar bilgisi Word'de dipnottaysa oradan al; eksik
    bilgiyi uydurma, `[DOLDUR]` bırak. `metin/metin.typ` ön sözü ve bölümleri sırayla `#include` eder.
    **Ön sayfalar (Vizetek profilleri):** ön sözden hemen önce `#ana-metin-baslat()`, ön söz başlığı
    `#numarasiz[Ön Söz]`, içindekiler ön sözden sonra `#icindekiler-sayfasi()`; kısım varsa `#kisim("I")[Ad]`.

@@ -37,6 +37,18 @@ class Yazi(unittest.TestCase):
     def test_konusma_cizgisi(self):
         self.assertEqual(d("\\- Merhaba.\n– Nasılsın?\n- liste ögesi"), "— Merhaba.\n— Nasılsın?\n- liste ögesi")
         self.assertEqual(d("-- Peki.", konusma="–"), "– Peki.")
+        self.assertEqual(d("\\- Fizik muayene bulguları", konusma=None), "\\- Fizik muayene bulguları")  # bilimsel kitap
+
+    def test_tip_kitabi_kaliplari(self):
+        # Klinik Çocuk Cerrahisi (19.11.2026): dikiş numarası aralık değildir; APA'nın yazar atlama üç noktası kalır
+        self.assertEqual(d("5-0 Prolene ve 4-0 PDS ile"), "5-0 Prolene ve 4-0 PDS ile")
+        self.assertEqual(d("Shenoy, M., . . . Roe, L. (2020)."), "Shenoy, M., . . . Roe, L. (2020).")
+
+    def test_baglanti_ve_doi_korunur(self):
+        # pandoc "//" dizisini "/\/" diye kaçışlar; DOI'deki tire aralık çizgisine dönmemeli
+        for s in ("https:/\\/doi.org/10.1542/peds.2010-3851", "https://doi.org/10.1016/S0140-6736(20)30183-5",
+                  "doi:10.1542/peds.2010-3851", "yazı 10.1542/peds.2010-3851 numaralı"):
+            self.assertEqual(d(s), s)
 
     def test_yuzde_ve_bolunmez_bosluk(self):
         self.assertEqual(d("oran 25% ve % 30"), "oran %25 ve %30")

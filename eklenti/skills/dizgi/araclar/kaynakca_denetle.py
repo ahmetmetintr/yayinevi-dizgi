@@ -21,6 +21,7 @@ ALFABE = "abcçdefgğhıijklmnoöpqrsştuüvwxyz"
 DOI = re.compile(r"10\.\d{4,9}/[^\s\]\)>]+")
 APA = re.compile(r"^(?P<yazar>[^()]+?)\s*\((?P<yil>\d{4}[a-z]?|t\.y\.|n\.d\.)[^)]*\)")
 BASLIK = re.compile(r"^=+\s*(kaynaklar|kaynakça|kaynakca|references)\s*$", re.I | re.M)
+KAYNAKCA_BLOGU = re.compile(r"#kaynakca(?:\((?:[^()\[\]]|\[[^\]]*\])*\))?\[")
 ATIF_PARANTEZ = re.compile(r"\(([^()]*?\d{4}[a-z]?[^()]*?)\)")
 ATIF_ANLATI = re.compile(r"([A-ZÇĞİÖŞÜ][\wçğıöşüÇĞİÖŞÜâîû'’-]+)(?:\s+(?:ve|&)\s+[A-ZÇĞİÖŞÜ][\w'’-]+|\s+vd\.|\s+et al\.)?\s+\((\d{4}[a-z]?)\)")
 PARCA = re.compile(r"^\s*(?:bkz\.\s*|örn\.\s*|aktaran\s*)?([A-ZÇĞİÖŞÜ][\wçğıöşüÇĞİÖŞÜâîû'’ -]*?)(?:,|\s+ve\s|\s+&\s|\s+vd\.)[^;]*?(\d{4}[a-z]?)")
@@ -47,15 +48,17 @@ def paragraflar(metin):
 def bolumler(metin):
     """[(gövde, kaynaklar)]: her #kaynakca[…] bloğu kendinden önceki metinle bir bölüm sayılır.
     Blok yoksa "Kaynaklar / Kaynakça" başlığının altı okunur."""
-    sonuc, onceki, i = [], 0, metin.find("#kaynakca[")
-    while i >= 0:
-        bas = j = i + len("#kaynakca[")
+    sonuc, onceki = [], 0
+    for m in KAYNAKCA_BLOGU.finditer(metin):         # #kaynakca[…] ya da #kaynakca(baslik: […])[…]
+        if m.start() < onceki:
+            continue
+        bas = j = m.end()
         derin = 1
         while j < len(metin) and derin:
             derin += {"[": 1, "]": -1}.get(metin[j], 0) if metin[j - 1] != "\\" else 0
             j += 1
-        sonuc.append((metin[onceki:i], paragraflar(metin[bas:j - 1])))
-        onceki, i = j, metin.find("#kaynakca[", j)
+        sonuc.append((metin[onceki:m.start()], paragraflar(metin[bas:j - 1])))
+        onceki = j
     if not sonuc:
         b = BASLIK.search(metin)
         if b:

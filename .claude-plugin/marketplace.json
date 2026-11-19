@@ -11,7 +11,7 @@
     {
       "name": "dizgi",
       "source": "./eklenti",
-      "description": "Word dosyasından baskıya hazır PDF: kitap şablonu, Türkçe tipografi, PDF kontrolü, tashih, matbaa hazırlığı, Crossref DOI kaydı ve atıf dizini."
+      "description": "Word dosyasından baskıya hazır PDF: kitap şablonu, Türkçe tipografi, imla denetimi (sarı prova), PDF kontrolü, tashih, kapak ve matbaa hazırlığı, Crossref DOI kaydı ve atıf dizini."
     }
   ]
 }

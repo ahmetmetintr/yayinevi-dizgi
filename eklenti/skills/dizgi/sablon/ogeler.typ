@@ -42,35 +42,71 @@
   counter(footnote).update(0)
 }
 
-// Kısım sayfası: sağ sayfada kısım adı ve içindeki bölümlerin listesi; arkası boş kalır.
-#let kisim(no, baslik) = {
+// Kısım (bölüm grubu) sayfası: sağ sayfada grup adı ve içindeki bölümlerin listesi; arkası boş kalır.
+// Editör grupları "BÖLÜM 1: …" diye adlandırdıysa: #kisim("1", etiket: "BÖLÜM")[Temel İlkeler ve Fizyoloji]
+#let kisim(no, baslik, etiket: "KISIM") = {
+  [#metadata(none) <dizgi-kisim-oncesi>]  // boş sayfa tespiti için (kitap.typ → bos-sayfa-mi)
   pagebreak(to: "odd", weak: true)
-  [#metadata(no) <dizgi-kisim>]
+  [#metadata((no: no, baslik: baslik, etiket: etiket)) <dizgi-kisim>]
   set par(first-line-indent: 0pt, justify: false)
+  set text(hyphenate: false)
   v(42mm)
-  align(center, text(size: 1.9em)[KISIM #no])
+  align(center, text(size: 1.9em)[#etiket #no])
   v(6mm)
   align(center, text(size: 1.55em, baslik))
   v(12mm)
   context {
     let bu = here()
     let sonraki = query(selector(<dizgi-kisim>).after(bu)).filter(k => k.location() != bu)
-    let secici = selector(heading.where(level: 1)).after(bu)
+    let secici = selector(heading.where(level: 1)).or(<dizgi-alt-grup>).after(bu)
     if sonraki.len() > 0 { secici = secici.before(sonraki.first().location()) }
     set text(size: 0.92em, style: "italic")
-    for b in query(secici).filter(b => b.numbering != none) {
-      align(center, block(below: 0.6em)[Bölüm #counter(heading).at(b.location()).first() — #b.body])
+    for b in query(secici) {
+      if b.func() == metadata {
+        align(center, block(above: 0.9em, below: 0.5em, text(style: "normal", weight: "bold", b.value)))
+      } else if b.numbering != none {
+        align(center, block(below: 0.6em)[#counter(heading).at(b.location()).first(). #b.body])
+      }
     }
   }
   // Arkası boş kalır: sonraki bölüm sağ sayfada açılır, araya numarasız boş sayfa girer.
 }
 
-// İçindekiler istenen yerde (profil `icindekiler: "elle"` ise, ör. Ön Söz'den sonra).
-#let icindekiler-sayfasi(baslik: [İçindekiler]) = outline(title: baslik)
+// Bölüm grubunun içinde alt grup (ör. "Üst Gastrointestinal Sistem"): yalnız kısım sayfasında ve
+// içindekilerde görünür, sayfa açmaz. İlk bölümünden hemen önce yazılır.
+#let alt-grup(baslik) = [#metadata(baslik) <dizgi-alt-grup>]
+
+// İçindekiler istenen yerde (profil `icindekiler: "elle"` ise, ör. Ön Söz'den sonra). Kısım varsa
+// gruplu yazılır: grup satırı kalın, alt grup italik, bölümler numarası ve sayfasıyla; tıklanır.
+#let icindekiler-sayfasi(baslik: [İçindekiler]) = {
+  heading(level: 1, numbering: none, outlined: false, baslik)
+  set text(hyphenate: false)
+  context if query(<dizgi-kisim>).len() == 0 { outline(title: none) } else {
+    set par(first-line-indent: 0pt, justify: false)
+    let satir(govde, yer, kalin: false) = block(above: 0.45em, below: 0.45em, link(yer, {
+      set text(weight: if kalin { "bold" } else { "regular" })
+      govde
+      box(width: 1fr, repeat[#h(2pt).#h(2pt)])
+      numbering("1", ..counter(page).at(yer))
+    }))
+    for o in query(selector(heading.where(level: 1)).or(<dizgi-kisim>).or(<dizgi-alt-grup>).after(here())) {
+      if o.func() == metadata and type(o.value) == dictionary {
+        block(above: 1.3em, below: 0.5em, link(o.location(), strong[#o.value.etiket #o.value.no: #tr-buyuk(o.value.baslik)]))
+      } else if o.func() == metadata {
+        block(above: 0.8em, below: 0.4em, emph(o.value))
+      } else if o.outlined {
+        let no = if o.numbering != none [#counter(heading).at(o.location()).first(). ]
+        satir([#no#o.body], o.location())
+      }
+    }
+  }
+}
 
 // Kaynakça: asılı girinti, küçük punto. Her kaynak ayrı paragraf; DOI satır sonunda.
-#let kaynakca(baslik: [Kaynaklar], punto: 0.82em, asili: 1.25cm, govde) = {
-  heading(level: 2, numbering: none, outlined: false, baslik)
+// Yeni sayfadan başlar: metin biter bitmez kaynakçaya geçilmez (kullanıcı kararı, 19.11.2026).
+#let kaynakca(baslik: [Kaynaklar], duzey: 2, punto: 0.82em, asili: 1.25cm, yeni-sayfa: true, govde) = {
+  if yeni-sayfa { pagebreak(weak: true) }
+  heading(level: duzey, numbering: none, outlined: false, baslik)
   set text(size: punto)
   set par(first-line-indent: 0pt, hanging-indent: asili, justify: true, spacing: 0.55em)
   show link: it => it.body

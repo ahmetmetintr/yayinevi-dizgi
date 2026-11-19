@@ -1,6 +1,6 @@
 # Mimari
 
-Yayınevi dizgi kiti: Claude Code'a kurulan **dizgi eklentisi** (beş beceri: dizgi, tashih, kapak, doi, atif) ve onu
+Yayınevi dizgi kiti: Claude Code'a kurulan **dizgi eklentisi** (altı beceri: dizgi, tashih, kapak, imla, doi, atif) ve onu
 kopyala-yapıştır promptlarla anlatan **eğitim sayfası**. Depo aynı zamanda eklentinin pazar yeridir
 (`.claude-plugin/marketplace.json`); kurulumda yalnız `eklenti/` klasörü kopyalanır.
 
@@ -14,11 +14,12 @@ kopyala-yapıştır promptlarla anlatan **eğitim sayfası**. Depo aynı zamanda
 | `eklenti/skills/dizgi/araclar/` | `tipografi.py`, `pdf_kontrol.py`, `kaynakca_denetle.py` (APA, DOI, atıf, Crossref), `bolum_denetle.py` (bölüm uzunluğu, ORCID), `e_kitap.py` (kapak + yer imi + PDF bilgisi) | Hiçbir şeye |
 | `eklenti/skills/tashih/` | Düzeltme turları: `araclar/` (tashih_oku.py, tashih_uygula.py, tashih_rapor.py) | Hiçbir şeye |
 | `eklenti/skills/kapak/` | Kapak: `sablon/kapak.typ` (ölçü), `araclar/kapak_kutulari.py` | Hiçbir şeye |
+| `eklenti/skills/imla/` | İmla denetimi: `araclar/imla_denetle.py` (rapor + sarı prova deseni), kurallar veri olarak `kurallar/sik-yanlislar.tsv` | Hiçbir şeye (sarı prova `dizgi` şablonunun `sari-desen` ayarıyla) |
 | `eklenti/skills/doi/` | Crossref DOI kaydı: `araclar/` (doi_hazirla.py, doi_xml.py, doi_sorgula.py, doi_ortak.py), `sablon/kayit-ornegi.json` | Kendi `doi_ortak.py`'sine; ağda yalnız api.crossref.org (okuma) |
 | `eklenti/skills/atif/` | Atıf dizini: `araclar/` (atif_hazirla.py: PDF → dizin.json; atif_uret.py: denetim, bölüm PDF'leri, Excel; saf modüller atif_kaynakca.py, atif_yapi.py, atif_xlsx.py; atif_ortak.py), `sablon/dizin-ornegi.json` | Kendi `atif_ortak.py`'sine; ağa çıkmaz |
 | `kurulum/` | Windows kurulum betiği (`windows.ps1`, `irm … \| iex` ile) ve çalışma klasörüne konan `CLAUDE.md` şablonu | GitHub'daki `main` dalı (ham dosya adresleri) |
 | `egitim/` | Eğitim sayfası: `sayfa.html` iskelet, `promptlar/KOD-ad.md`, `uret.py` | `eklenti/.claude-plugin/plugin.json` (sürüm) |
-| `testler/` | Birim testleri (tipografi, tashih, kaynakça, doi, atif), örnek kitaplar (klasik, Vizetek editörlü ve telif) ve örnek kapak | `eklenti/` |
+| `testler/` | Birim testleri (tipografi, tashih, kaynakça, imla, doi, atif), örnek kitaplar (klasik, Vizetek editörlü ve telif) ve örnek kapak | `eklenti/` |
 | `scripts/denetle.sh` | Tek denetim komutu | hepsi |
 | `cikti/` | Üretilen dosyalar (git dışında, elle düzenlenmez) | — |
 
@@ -34,11 +35,13 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
    tashih_rapor.py → işaretli PDF + rapor). Her tur `tashih/tur-NN/` klasöründe; önceki turlar
    `liste.sonuc.json` ile denetlenir.
 3. Kitap → `kapak` (dört eskiz → seçilen yön → kapak.typ ile tam kapak → kapak_kutulari.py).
-4. Son PDF → `doi` (doi_hazirla.py → `doi/kayit.json` (tek kaynak, elle düzeltilir) → doi_sorgula.py --doldur
+4. metin/*.typ → `imla` (imla_denetle.py → imla-raporu.md + imla-isaretleri.typ → `--input imla=evet` ile sarı prova
+   PDF) → editör kararı → onaylananlar `tashih` turu olarak işlenir. İmla aracı metne hiç yazmaz.
+5. Son PDF → `doi` (doi_hazirla.py → `doi/kayit.json` (tek kaynak, elle düzeltilir) → doi_sorgula.py --doldur
    (kitap Crossref'te kayıtlıysa) → doi_xml.py: denetim + onay tablosu + `doi/crossref-<zaman>.xml` → yetkili kişi
    test.crossref.org'a, sonra doi.crossref.org'a yükler → doi_sorgula.py ile doğrulama). Araçlar Crossref'e
    yüklemez ve kimlik bilgisi kullanmaz.
-5. Yayımlanmış kitapların PDF'leri → `atif` (atif_hazirla.py: künye, bölümler (yer imleri ya da tahmin), ilk
+6. Yayımlanmış kitapların PDF'leri → `atif` (atif_hazirla.py: künye, bölümler (yer imleri ya da tahmin), ilk
    sayfa, kaynakça satırları → kaynaklar → `atif-dizini/dizin.json` (bütün kitaplar, tek kaynak, elle düzeltilir) →
    atif_uret.py: denetim → `pdf/<kod>/<kod>-bolum-NN.pdf` (künye + ilk sayfa + kaynakça) ve `atif-dizini.xlsx`).
    Çekirdek modüller (atif_kaynakca.py, atif_yapi.py) PDF açmaz; satırları atif_hazirla.py verir.
@@ -50,6 +53,8 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
 | Yeni beceri | `eklenti/skills/<ad>/SKILL.md` (+ `araclar/`, `sablon/`) | `skills/kapak` |
 | Yeni prompt | `egitim/promptlar/KOD-ad.md` + `sayfa.html`'de `{{KART:KOD|Başlık|Açıklama}}` ve dizin satırı | `D1-kapak-onerileri.md` |
 | Tipografi kuralı | `tipografi.py` → `kurallar()` + `testler/test_tipografi.py` | "üç nokta" |
+| İmla: sık yanlış | `imla/kurallar/sik-yanlislar.tsv` satırı (yanlış · doğru · kural) | `barsak*` → `bağırsak*` |
+| İmla: yeni kural türü | `imla_denetle.py` → `kural_bulgulari()` + `testler/test_imla.py` | kısaltmadan sonra kesmesiz ek |
 | Düzeltme biçimi | `tashih_oku.py` → `ayristir()` + `testler/test_tashih.py` | "Değiştir: «eski» → «yeni»" |
 | Kaynakça biçimi (atıf dizini) | `atif_kaynakca.py` → `kaynaklara_ayir()` / `kaynak_alanlari()` + `testler/test_atif.py` | numaralı kaynakça |
 | Atıf dizini sütunu | `atif_uret.py` → `tablo_sayfalari()` (başlık, satır ve genişlik aynı sırada) | "Bölüm DOI" |

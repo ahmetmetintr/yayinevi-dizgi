@@ -1,4 +1,4 @@
-#import "/eklenti/skills/dizgi/sablon/kitap.typ": sahne-arasi
+#import "/eklenti/skills/dizgi/sablon/ogeler.typ": sahne-arasi
 
 = Önsöz
 

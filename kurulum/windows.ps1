@@ -2,6 +2,7 @@
 #
 # PowerShell'de çalıştırın:
 #   irm https://raw.githubusercontent.com/ahmetmetintr/yayinevi-dizgi/main/kurulum/windows.ps1 | iex
+# Yayınevi kuralları Vizetek profiliyle gelir. Başka yayınevi için önce: $DizgiProfil = 'genel'
 #
 # Kurar: Claude Code, Git, Typst, Pandoc, Python 3 ve Python paketleri (pypdf, pymupdf, python-docx);
 # belge eklentisi (document-skills) ve dizgi eklentisi (dizgi, tashih, kapak); Belgeler\Dizgi çalışma klasörü
@@ -9,6 +10,7 @@
 # çalıştırmak zararsızdır. winget paketlerini, paket ve kaynak sözleşmelerini kabul ederek kurar.
 
 $DizgiDepo = 'https://raw.githubusercontent.com/ahmetmetintr/yayinevi-dizgi/main'
+if (-not (Get-Variable -Name DizgiProfil -ValueOnly -ErrorAction SilentlyContinue)) { $DizgiProfil = 'vizetek' }
 $DizgiSonuc = New-Object System.Collections.Generic.List[object]
 
 function DizgiBaslik($metin) { Write-Host "`n== $metin" -ForegroundColor Cyan }
@@ -81,7 +83,8 @@ function DizgiKur {
   $dizgi = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'Dizgi'
   New-Item -ItemType Directory -Force -Path $dizgi | Out-Null
   DizgiIndir "$DizgiDepo/kurulum/dizgi-klasoru-CLAUDE.md" (Join-Path $dizgi 'CLAUDE.md') 'Dizgi\CLAUDE.md'
-  DizgiIndir "$DizgiDepo/eklenti/skills/dizgi/sablon/yayinevi.md" (Join-Path $dizgi 'yayinevi.md') 'Dizgi\yayinevi.md'
+  $kural = if ($DizgiProfil -eq 'genel') { 'yayinevi.md' } else { "yayinevi-$DizgiProfil.md" }
+  DizgiIndir "$DizgiDepo/eklenti/skills/dizgi/sablon/$kural" (Join-Path $dizgi 'yayinevi.md') "Dizgi\yayinevi.md ($DizgiProfil)"
 
   Write-Host "`n== Sonuç" -ForegroundColor Cyan
   $DizgiSonuc | Format-Table -AutoSize | Out-String | Write-Host

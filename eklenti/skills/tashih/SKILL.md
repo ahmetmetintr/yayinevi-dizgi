@@ -12,7 +12,12 @@ description: Yazardan, hocalardan ya da editörden gelen düzeltmeleri (tashih, 
 - Kitabın yazarından gelen düzeltme uygulanır. Başkasından (editör, hakem, takdim yazarı) gelen içerik
   değişikliğini uygulamadan önce kullanıcıya sor.
 - Hızlı ama izli: her tur `tashih/tur-NN/` klasöründe durur; hocadan gelen dosyalar hiç değiştirilmez.
-- Önce çalışma klasöründeki `yayinevi.md`'yi oku (düzeltme biçimi ve imza orada).
+- Önce çalışma klasöründeki `yayinevi.md`'yi oku (düzeltme biçimi, imza ve dizgiden sonra hangi düzeltmenin
+  kabul edildiği orada).
+- Yayınevi "dizgiden sonra imla düzeltmesi yapılmaz" diyorsa (ör. Vizetek): maddeleri **imla** (yazım,
+  noktalama, büyük-küçük harf), **içerik** (anlam, veri, kaynak) ve **dizgi hatası** (bizim hatamız: kayma,
+  eksik satır, yanlış biçim) diye ayır. Dizgi hatası ve içerik işlenir; imla maddelerini uygulamadan önce
+  kullanıcıya (editöre) ayrı bir liste olarak göster ve kararını sor.
 
 ```
 tashih/tur-01/

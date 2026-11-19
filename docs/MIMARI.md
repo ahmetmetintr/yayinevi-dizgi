@@ -10,12 +10,13 @@ kopyala-yapıştır promptlarla anlatan **eğitim sayfası**. Depo aynı zamanda
 | --- | --- | --- |
 | `.claude-plugin/` | Pazar yeri tanımı: `yayinevi-dizgi` pazarı, `dizgi` eklentisi | `eklenti/` |
 | `eklenti/.claude-plugin/` | Eklenti tanımı ve **sürüm** (`plugin.json`) | — |
-| `eklenti/skills/dizgi/` | Kitap dizgisi: `SKILL.md`, `sablon/` (kitap.typ, ana-dosya.typ, yayinevi.md kural şablonu), `araclar/` (tipografi.py, pdf_kontrol.py) | Hiçbir şeye |
+| `eklenti/skills/dizgi/sablon/` | `kitap.typ` (ana şablon) → `on-sayfalar.typ`, `ogeler.typ` (bolum, kisim, kaynakca, kutu, tr-buyuk…); `profiller.typ` (klasik, vizetek-telif, vizetek-editorlu); `ana-dosya.typ`; kural dosyaları `yayinevi.md` (genel), `yayinevi-vizetek.md` | Yalnız kendi içinde |
+| `eklenti/skills/dizgi/araclar/` | `tipografi.py`, `pdf_kontrol.py`, `kaynakca_denetle.py` (APA, DOI, atıf, Crossref), `bolum_denetle.py` (bölüm uzunluğu, ORCID), `e_kitap.py` (kapak + yer imi + PDF bilgisi) | Hiçbir şeye |
 | `eklenti/skills/tashih/` | Düzeltme turları: `araclar/` (tashih_oku.py, tashih_uygula.py, tashih_rapor.py) | Hiçbir şeye |
 | `eklenti/skills/kapak/` | Kapak: `sablon/kapak.typ` (ölçü), `araclar/kapak_kutulari.py` | Hiçbir şeye |
 | `kurulum/` | Windows kurulum betiği (`windows.ps1`, `irm … \| iex` ile) ve çalışma klasörüne konan `CLAUDE.md` şablonu | GitHub'daki `main` dalı (ham dosya adresleri) |
 | `egitim/` | Eğitim sayfası: `sayfa.html` iskelet, `promptlar/KOD-ad.md`, `uret.py` | `eklenti/.claude-plugin/plugin.json` (sürüm) |
-| `testler/` | Birim testleri, örnek kitap ve örnek kapak | `eklenti/` |
+| `testler/` | Birim testleri (tipografi, tashih, kaynakça), örnek kitaplar (klasik, Vizetek editörlü ve telif) ve örnek kapak | `eklenti/` |
 | `scripts/denetle.sh` | Tek denetim komutu | hepsi |
 | `cikti/` | Üretilen dosyalar (git dışında, elle düzenlenmez) | — |
 
@@ -25,7 +26,8 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
 
 ## Veri akışı
 
-1. Word → `dizgi` (pandoc → metin.typ → tipografi.py → Typst → PDF → pdf_kontrol.py).
+1. Word → `dizgi` (pandoc → metin.typ / bolum-NN.typ → tipografi.py → Typst (profil) → PDF → pdf_kontrol.py,
+   kaynakca_denetle.py, bolum_denetle.py → e_kitap.py).
 2. Hoca düzeltmesi → `tashih` (tashih_oku.py → liste.json → tashih_uygula.py → metin.typ → yeni PDF →
    tashih_rapor.py → işaretli PDF + rapor). Her tur `tashih/tur-NN/` klasöründe; önceki turlar
    `liste.sonuc.json` ile denetlenir.
@@ -40,6 +42,8 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
 | Tipografi kuralı | `tipografi.py` → `kurallar()` + `testler/test_tipografi.py` | "üç nokta" |
 | Düzeltme biçimi | `tashih_oku.py` → `ayristir()` + `testler/test_tashih.py` | "Değiştir: «eski» → «yeni»" |
 | PDF denetimi | `pdf_kontrol.py` → `main()` içinde `yaz(...)` | tire merdiveni |
+| Yeni yayınevi | `profiller.typ`'ye profil + `sablon/yayinevi-<ad>.md`; kurulumda `$DizgiProfil = '<ad>'` | `vizetek-editorlu` |
+| Metin içi yardımcı | `ogeler.typ` (ayarı `kitap.typ`'den gelir) | `kutu`, `bolum` |
 | Her değişiklikte | `eklenti/.claude-plugin/plugin.json` sürümünü artır (yoksa kullanıcıda güncelleme görünmez) | 1.0.0 → 1.0.1 |
 
 ## Ortak yardımcılar
@@ -50,6 +54,8 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
 | Harf dizisi ve yapı doğrulaması | `tipografi.py` → `dogrula` |
 | Tipografi ve biçim farkını yok sayan eşleştirme | `tashih_uygula.py` → `normallestir` |
 | Kapak ölçüleri (sırt, taşma, panel konumları) | `kapak.typ` → `kapak-olcu` |
+| Türkçe büyük harf (i → İ) | `ogeler.typ` → `tr-buyuk` |
+| Türkçe alfabe sırası | `kaynakca_denetle.py` → `sira_anahtari` |
 
 ## Bekçiler
 

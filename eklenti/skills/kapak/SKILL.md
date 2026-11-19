@@ -50,7 +50,10 @@ description: Kitap kapağı önerisi ve baskıya hazır tam kapak (ön + sırt +
   yazılar güvenli alanda kalır (kesimden en az 5 mm içeride, sırta 5 mm'den yakın değil).
 - Sırt: yön `yayinevi.md`'den; sıra genelde yazar · başlık · logo. 8 mm'den ince sırta yalnız başlık yazılır.
 - Arka kapak: tanıtım metni, varsa takdim alıntıları, ISBN barkodu ve logo için yer. Barkod ve logo
-  yayınevinden gelir; gelene kadar kutuyla yerini ayır ve `[DOLDUR]` yaz.
+  yayınevinden gelir; gelene kadar kutuyla yerini ayır ve `[DOLDUR]` yaz. Tanıtım metnini editör ya da yazar
+  verir (Vizetek: 100–150 sözcük, editörden); sözcük sayısını say ve sınırı aşıyorsa söyle; metni kendin
+  yazman istenirse taslak olarak işaretle, kitaptaki ifadelere dayan.
+- Editörlü kitapta ön kapakta "Editör: Unvan Ad SOYAD" yazar; bölüm yazarları kapağa yazılmaz.
 - Provada `kilavuz: true`, baskı dosyasında `false`. Derle, sonra kutuları yaz:
   `py araclar/kapak_kutulari.py kapak/tam-kapak.pdf --genislik 135 --yukseklik 210 --sirt <mm> --tasma 3`
   (ölçü tutmazsa araç durur).

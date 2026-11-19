@@ -1,29 +1,33 @@
 // Bu kitabın ana dosyası (dizgi skill'i). Derleme:
 //   typst compile kitap.typ cikti/kitap.pdf
-// Ölçü, yazı tipi ve künye bilgileri yayınevi kurallarından gelir; [DOLDUR] yazan yerleri doldurun.
+// Profil yayınevi kurallarından gelir (yayinevi.md → "Typst profili"). [DOLDUR] yazan yerleri doldurun.
 
-#import "sablon/kitap.typ": kitap, sahne-arasi
+#import "sablon/kitap.typ": kitap
+#import "sablon/profiller.typ": klasik, vizetek-telif, vizetek-editorlu
 
 #show: kitap.with(
+  ..klasik, // [DOLDUR: profil — klasik, vizetek-telif ya da vizetek-editorlu]
   baslik: "[DOLDUR: Kitap adı]",
   alt-baslik: none,
-  yazar: "[DOLDUR: Yazar adı]",
+  ucuncu-satir: none,
+  yazar: "[DOLDUR: Yazar adı ya da Editör: Unvan Ad SOYAD]",
   yayinevi: "[DOLDUR: Yayınevi adı]",
+  logo: none, // ör. "logo.png" (kitap klasöründe)
   kunye: (
-    ("Kitabın adı", "[DOLDUR]"),
-    ("Yazar", "[DOLDUR]"),
-    ("Editör", "[DOLDUR]"),
-    ("Dizgi", "[DOLDUR]"),
-    ("Kapak tasarımı", "[DOLDUR]"),
     ("ISBN", "[DOLDUR]"),
-    ("Yayıncı sertifika no", "[DOLDUR]"),
-    ("Baskı ve cilt", "[DOLDUR: Matbaa adı, adresi, matbaa sertifika no]"),
-    ("Birinci basım", "[DOLDUR: Ay Yıl]"),
-    ("", "[DOLDUR: Telif notu]"),
+    ("E-ISBN", "[DOLDUR]"),
+    ("DOI", "[DOLDUR]"),
+    "---",
+    ("", [[DOLDUR: Telif notu]]),
+    "---",
+    ("Yayın Koordinatörü", "[DOLDUR]"),
+    ("Kapak Tasarımı ve Mizanpaj", "[DOLDUR]"),
+    ("Baskı", "[DOLDUR: Şehir | Ay Yıl]"),
+    "---",
+    ("Yayıncı Sertifika No", "[DOLDUR]"),
   ),
-  // Yayınevi kuralları farklıysa burada değiştirin:
-  // genislik: 135mm, yukseklik: 210mm, ic-bosluk: 20mm, dis-bosluk: 15mm,
-  // ust-bosluk: 20mm, alt-bosluk: 22mm, yazi-tipi: "Libertinus Serif", punto: 10.5pt,
+  // Kitaba özel farklar profilden sonra yazılır, ör.: e-kitap: true, bolum-sag-sayfada: false
 )
 
+// Metin dosyaları: telif kitapta tek dosya, editörlü kitapta bölüm başına bir dosya.
 #include "metin/metin.typ"

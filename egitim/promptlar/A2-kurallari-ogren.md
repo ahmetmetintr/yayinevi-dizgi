@@ -1,12 +1,12 @@
-Dizgi klasöründeki `yayinevi.md` dosyasını yayınevimize göre dolduracağız.
+Dizgi klasöründeki `yayinevi.md` dosyasını yayınevimize göre tamamlayacağız.
 
-Önce dosyayı oku. Sonra soruları gruplar hâlinde, mümkünse çoktan seçmeli sor; bilmediğim yerde "varsayılan kalsın" seçeneği olsun:
-1. Yayınevi: ad, yayıncı sertifika no, adres ve iletişim, çalıştığımız matbaa ve matbaa sertifika no, künyedeki telif notu.
-2. Kitap ölçüleri: hangi tür için hangi kesim ölçüsünü ve kenar boşluklarını kullanıyoruz.
-3. Yazı: gövde yazı tipi (bilgisayardaki yazı tiplerini `typst fonts` ile listele, Türkçe harfleri eksiksiz olanları öner), punto, satır aralığı.
+Önce dosyayı oku. Dosya yayınevimiz için ön doldurulmuşsa yalnız [TEYİT] ve [DOLDUR] yazan satırları sor; değilse aşağıdaki grupların hepsini sor. Soruları gruplar hâlinde, mümkünse çoktan seçmeli sor; bilmediğim yerde "şimdilik böyle kalsın" seçeneği olsun:
+1. Yayınevi: ad, yayıncı sertifika no, adres ve iletişim, matbaa, künyedeki telif notu, logo dosyası.
+2. Kitap türleri ve profil: telif kitap mı, editörlü kitap mı; kesim ölçüsü ve kenar boşlukları.
+3. Yazı: gövde yazı tipi (bilgisayardaki yazı tiplerini `typst fonts` ile listele, Türkçe harfleri eksiksiz olanları öner), punto, satır aralığı, tablo ve şekil başlıklarının biçimi.
 4. Noktalama: konuşma çizgisi, ara söz çizgisi, tırnak tercihi.
-5. Sayfa düzeni: sayfa numarasının yeri, üst bilgi, bölüm başı, forma sayısı, tek renk mi.
-6. Kapak: sırt yazısının yönü, sırttaki sıra, arka kapak düzeni, kapakta kullandığımız yazı tipleri.
-7. Tashih: yazara düzeltmeleri hangi biçimde gönderiyoruz, yorumlarda hangi ad görünsün.
+5. Sayfa düzeni: bölüm başı sağ sayfada mı, e-kitapta boş sayfa istenir mi, forma, tek renk mi.
+6. Kapak: sırt yazısının yönü, sırttaki sıra, arka kapak yazısının uzunluğu ve kimden geldiği.
+7. Tashih: dizgiden sonra hangi düzeltmeler kabul edilir, yazara düzeltmeler hangi biçimde gider, yorumlarda hangi ad görünür.
 
 Cevaplarımı dosyaya yaz, "Durum" satırını bugünün tarihiyle "DOLDURULDU" yap ve değişen satırları bana göster.

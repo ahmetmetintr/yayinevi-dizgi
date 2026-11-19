@@ -9,6 +9,9 @@ Türkçe kitap yayıncılığı için Claude Code eklentisi. Üç beceri getirir
   tuzağını her turda denetler.
 - **kapak** — kitabın içinden çıkan dört kapak yönü ve sırt, taşma payı, CMYK ile baskıya hazır tam kapak.
 
+Hazır yayınevi profili: **Vizetek Yayıncılık** (2026 yazım kılavuzu ve dizgisi: 16×24, Times New Roman 11 pt /
+1,15, editörlü ve telif kitap düzeni, APA 7 + DOI zorunlu kaynakça, 10–25 sayfalık bölüm, e-kitap).
+
 ## Kurulum (Windows, PowerShell)
 
 Tek satır: Claude Code, Git, Typst, Pandoc, Python, eklentiler ve Belgeler\Dizgi çalışma klasörü.

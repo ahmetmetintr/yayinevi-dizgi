@@ -11,6 +11,10 @@
 - Çalışılan matbaa, adresi ve matbaa sertifika no: [DOLDUR]
 - Telif notu: [DOLDUR]
 
+## Typst profili
+- Profil: klasik (13,5 × 21 genel kitap). Hazır yayınevi profilleri `sablon/profiller.typ` içinde.
+- Kitap türü: telif / editörlü (editörlü kitapta bölüm başına `#bolum(...)` ve `#kaynakca[...]`)
+
 ## Kitap ölçüleri (Typst parametresi: milimetre)
 | Tür | Kesim (genislik × yukseklik) | ic-bosluk | dis-bosluk | ust-bosluk | alt-bosluk |
 | --- | --- | --- | --- | --- | --- |

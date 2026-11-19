@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "Claude Code ile Türkçe kitap dizgisi: Typst şablonu, Türkçe tipografi düzeltmesi, baskı öncesi kontrol.",
-    "version": "1.0.1"
+    "version": "1.1.0"
   },
   "plugins": [
     {

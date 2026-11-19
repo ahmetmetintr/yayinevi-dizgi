@@ -120,10 +120,11 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
     <svg class="ayar" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="8" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="15" cy="15" r="4" fill="none" stroke="currentColor" stroke-width="1"/><path d="M15 0v30M0 15h30" stroke="currentColor" stroke-width="1"/></svg>
     <span class="etiket">Yayınevi eğitimi · kopyala, yapıştır, diz</span>
     <h1>Claude Code ile Dizgi</h1>
-    <p class="giris">Yazarın Word dosyasından baskıya hazır PDF'e, hocanın düzeltmelerinden kapağa kadar bütün iş bu sayfadaki hazır metinlerle yapılır. Her kartta bir prompt var: <strong>Kopyala</strong>'ya basın, Claude Code'a yapıştırın, Enter'a basın. Claude gerekirse soru sorar; cevaplayın.</p>
+    <p class="giris">Yazarın Word dosyasından baskıya hazır PDF'e ve e-kitaba, hocanın düzeltmelerinden kapağa kadar bütün iş bu sayfadaki hazır metinlerle yapılır. Eklenti Vizetek Yayıncılık'ın 2026 yazım kılavuzuna ve dizgisine göre ayarlıdır: 16×24 kesim, editörlü ve telif kitap düzeni, APA 7 kaynakça ve DOI denetimi. Her kartta bir prompt var: <strong>Kopyala</strong>'ya basın, Claude Code'a yapıştırın, Enter'a basın. Claude gerekirse soru sorar; cevaplayın.</p>
     <dl class="is-emri">
-      <div><dt>Kesim</dt><dd>135 × 210 mm</dd></div>
-      <div><dt>Dizgi motoru</dt><dd>Typst</dd></div>
+      <div><dt>Kesim</dt><dd>160 × 240 mm</dd></div>
+      <div><dt>Gövde</dt><dd>Times 11 / 14,5 pt</dd></div>
+      <div><dt>Kaynakça</dt><dd>APA 7 · DOI</dd></div>
       <div><dt>Forma</dt><dd>16 sayfa</dd></div>
       <div><dt>İç baskı</dt><dd>1 renk</dd></div>
       <div><dt>Kapak</dt><dd>CMYK · 3 mm taşma</dd></div>
@@ -149,7 +150,7 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
           <li><a href="#B4" data-nav="B4"><span class="kod">B4</span>Diz</a></li>
           <li><a href="#B5" data-nav="B5"><span class="kod">B5</span>Kontrol</a></li>
           <li><a href="#B6" data-nav="B6"><span class="kod">B6</span>Hoca düzeltmeleri</a></li>
-          <li><a href="#B7" data-nav="B7"><span class="kod">B7</span>Matbaa</a></li>
+          <li><a href="#B7" data-nav="B7"><span class="kod">B7</span>Matbaa, e-kitap</a></li>
         </ol></div>
       <div><span class="etiket">3 · Kapak</span>
         <ol>
@@ -194,7 +195,7 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
         <p class="not">Terminal istemeyenler Claude masaüstü uygulamasının Code sekmesinde Belgeler\Dizgi klasörünü seçerek çalışabilir; eklentiler orada da çalışır.</p>
       </article>
 
-      {{KART:A2|Yayınevimizin kurallarını öğren|Claude soru sorarak ölçüleri, yazı tipini, çizgi ve tırnak tercihlerini, kapak ve düzeltme alışkanlıklarını kaydeder. Bir kez yapılır; sonraki bütün kitaplar bu kurallarla dizilir.}}
+      {{KART:A2|Yayınevimizin kurallarını tamamla|Vizetek'in kuralları kurulumla hazır gelir (yazım kılavuzu ve dizgiden çıkarıldı). Claude yalnız teyit gereken satırları sorar: tablo başlığının biçimi, sırt yazısının yönü, e-kitapta boş sayfa, dizgiden sonra imla düzeltmesi kuralı. Bir kez yapılır.}}
       {{KART:A2b|Kuralları bastığımız bir kitaptan çıkar|A2'nin yerine kullanılabilir. Daha önce bastığınız bir kitabın PDF'ini önce <code>Dizgi\ornek</code> klasörüne koyun.}}
       {{KART:A3|Kurulumu bir deneme kitabıyla sına|Claude kendi yazdığı kısa bir metni baştan sona dizer, sonra bir hocanın yapacağı gibi PDF'e düzeltme işaretleri koyup tashih akışını da dener.}}
 
@@ -223,12 +224,12 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
       </div>
       <div class="akis" aria-label="İş akışı"><span>Word</span><i>→</i><span>metin.typ</span><i>→</i><span>tipografi</span><i>→</i><span>PDF</span><i>→</i><span>kontrol</span><i>→</i><span>hoca düzeltmesi</span><i>→</i><span>matbaa</span></div>
       {{KART:B1|Yeni kitap aç|Kitabın klasörünü, şablonunu ve künyesini hazırlar.}}
-      {{KART:B2|Word dosyasını içeri al|Önce Word dosyasını kitabın <code>kaynak</code> klasörüne kopyalayın. Claude dosyayı dönüştürür ve başlık, dipnot, görsel sayılarını Word'le karşılaştırır.}}
+      {{KART:B2|Word dosyalarını içeri al|Önce Word dosyalarını kitabın <code>kaynak</code> klasörüne kopyalayın; editörlü kitapta her bölüm ayrı dosyadır. Claude dosyaları dönüştürür, bölüm başlıklarını ve yazar bilgilerini (unvan, kurum, ORCID) Vizetek düzenine getirir, sayıları Word'le karşılaştırır.}}
       {{KART:B3|Türkçe tipografi düzeltmesi|Tırnak, kesme işareti, kısa ve uzun çizgi, üç nokta, çift boşluk, yüzde işareti ve bölünmez boşluklar. Önce rapor gelir; siz onaylamadan dosya değişmez.}}
       {{KART:B4|Diz ve PDF üret|İç kapak, künye, içindekiler, sağ sayfada açılan bölümler, üst bilgi ve sayfa numaraları şablondan gelir.}}
-      {{KART:B5|Baskı öncesi kontrol|Ölçü, forma, gömülü yazı tipleri, eksik Türkçe harf yüzünden kayan yazı tipi, tek renk baskıda renkli içerik, tire merdiveni, doldurulmamış künye.}}
+      {{KART:B5|Baskı öncesi kontrol|Ölçü, forma, gömülü yazı tipleri, kayan yazı tipi, tek renk baskıda renkli içerik, tire merdiveni, doldurulmamış künye. Akademik kitapta ayrıca kaynakça (DOI zorunlu, APA, atıf eşleşmesi, Crossref) ve editörlü kitapta bölüm denetimi (10–25 sayfa, ORCID).}}
       {{KART:B6|Hocanın düzeltmelerini işle|İşaretli PDF (üstü çizili, ekleme imi, not, el yazısı), izli ya da yorumlu Word ve e-postayla gelen listeler okunur. Yalnız tek ve kesin yere oturan düzeltme uygulanır; gerisi hocaya kısa soru olarak döner. Önceki turların kaybolmadığı her turda denetlenir.}}
-      {{KART:B7|Matbaaya hazırla|Künye, forma tamamlama, son kontrol ve teslim notu.}}
+      {{KART:B7|Matbaa ve e-kitap|Künye, forma tamamlama, son kontrol; e-kitapta ön kapak, yer imleri ve PDF bilgileri; teslim notu.}}
     </section>
 
     <section class="bolum" id="kapak">

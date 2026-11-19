@@ -1,5 +1,5 @@
 // Şablon testi için örnek kitap (eğitim kiti testleri). Derleme kökü: kitin kök klasörü.
-#import "/eklenti/skills/dizgi/sablon/kitap.typ": kitap, sahne-arasi
+#import "/eklenti/skills/dizgi/sablon/kitap.typ": kitap
 
 #show: kitap.with(
   baslik: "Satırların Arasında",

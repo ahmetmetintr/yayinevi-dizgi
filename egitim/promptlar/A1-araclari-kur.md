@@ -12,7 +12,7 @@ Bu Windows bilgisayarı kitap dizgisi için hazırla. Teknik biri değilim; her 
    - `yayinevi.md`: dizgi skill'indeki `sablon/yayinevi.md` dosyasının kopyası.
    - `CLAUDE.md`, şu metinle:
      # Dizgi çalışma klasörü
-     Bu klasörde yayınevimizin kitapları dizilir. Dizgi, tashih ve kapak işlerinde ilgili skill'i kullan.
+     Bu klasörde yayınevimizin kitapları dizilir. Dizgi, tashih, imla, kapak, DOI ve atıf dizini işlerinde ilgili skill'i kullan.
      - Yayınevi kuralları: yayinevi.md (her işten önce oku).
      - Her kitap ayrı klasördedir; yazarın dosyaları kaynak/ içinde değişmeden kalır.
      - Yazarın sözcüklerine dokunma; yazım önerilerini kitabın NOTLAR.md dosyasına yaz.

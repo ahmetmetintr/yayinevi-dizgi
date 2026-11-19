@@ -16,7 +16,7 @@
   çoğaltılamaz, basılamaz, dağıtılamaz. Bu kitap, basılı ve elektronik (e-kitap) formatlarında
   yayımlanmaktadır. Kitap içeriğinin tüm sorumluluğu yazar(lar)ına aittir."
 - Logo: Dizgi klasörüne `logo.png` olarak konur (yayınevinden alınır).
-- DOI: her kitaba bir DOI, bölümlere ayrı DOI yok (Crossref). Biçim: `10.54637/vizetek.<ISBN, tiresiz>`.
+- DOI: kitaba ve editörlü kitapta her bölüme ayrı DOI (Crossref). Ayrıntı aşağıda, "DOI ve Crossref".
 - Yayın alanları: eğitim bilimleri, sağlık bilimleri (diş hekimliği, hemşirelik, eczacılık, fizyoterapi),
   sosyal ve beşerî bilimler, fen ve mühendislik, spor, hukuk, ilahiyat, filoloji, güzel sanatlar, ziraat,
   mimarlık, veterinerlik; YDS-YÖKDİL ve çocuk kitapları. Ağırlık editörlü akademik kitaplarda (bölüm çağrısı).
@@ -80,6 +80,24 @@
 - Yazara giden düzeltme biçimi: PDF üzerinde yorum; her yorum tek başına okunur
   ("Değiştir: «eski» → «yeni»", "Ekle: …", "Sil: «…»", "Biçim: …")
 - Yorumlarda görünecek ad: Vizetek Yayıncılık
+
+## DOI ve Crossref (doi skill'i)
+- Crossref üyeliği: Vizetek Publishing Company, üye no 33161, önek `10.54637`.
+- Kitap DOI'si: `10.54637/vizetek.<ISBN, tiresiz>` (ör. 10.54637/vizetek.9786253825409).
+- Bölüm DOI'si (editörlü kitap; Kasım 2026'da başladı): `<kitap DOI>.ch1`, `.ch2` … → `--bolum-eki .ch{no}`.
+- Bölüm DOI'sinin adresi: bölümün sitede kendi sayfası yok; şimdilik kitabın vizetek.com.tr sayfası. Bölüm sayfaları
+  açılınca adresler doldurulup kitap yeniden yüklenir.
+- Kayıt yolu: XML yüklemesi; önce test.crossref.org, sonuç temizse doi.crossref.org. Yüklemeyi hesabı olan kişi yapar.
+- Crossref'te yayınevi adı: Vizetek Yayıncılık · yayın yeri: Ankara · dil: tr
+- Crossref bildirim e-postası (yükleme sonucu buraya gelir): [TEYİT]
+- Bölüm DOI'si bölümün ilk sayfasına basılıyor mu, basılıyorsa nereye: [TEYİT]
+
+## Atıf dizini (atif skill'i)
+- Dizin yayınevinin kendisinindir: `Dizgi/atif-dizini/` klasöründe `dizin.json` (tek kaynak), `atif-dizini.xlsx`
+  (kaynaklar, bölümler, kitaplar) ve `pdf/` (her bölüm için künye + bölümün ilk sayfası + bölümün kaynakçası).
+- Dizine giren kitap PDF'i: yayımlanmış son PDF (e-kitap). Taslak PDF girmez.
+- Dönem: kitabın künyesindeki "Baskı: Ankara | Ay Yıl" satırı. Dizin hangi aralıklarla güncellenir: [TEYİT]
+- Bölüm PDF'inin ve Excel'in yükleneceği yer (site, paylaşılan klasör): [TEYİT]
 
 ## Künye (Vizetek düzeni, sırayla)
 ISBN · E-ISBN · DOI · telif notu · Yayın Tasarımcısı / Koordinatörü · Kapak Tasarımı ve Mizanpaj · Baskı

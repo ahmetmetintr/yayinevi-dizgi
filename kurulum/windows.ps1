@@ -5,7 +5,7 @@
 # Yayınevi kuralları Vizetek profiliyle gelir. Başka yayınevi için önce: $DizgiProfil = 'genel'
 #
 # Kurar: Claude Code, Git, Typst, Pandoc, Python 3 ve Python paketleri (pypdf, pymupdf, python-docx);
-# belge eklentisi (document-skills) ve dizgi eklentisi (dizgi, tashih, kapak); Belgeler\Dizgi çalışma klasörü
+# belge eklentisi (document-skills) ve dizgi eklentisi (dizgi, tashih, kapak, imla, doi, atif); Belgeler\Dizgi çalışma klasörü
 # (CLAUDE.md ve yayinevi.md ile). Yüklü olanı yeniden kurmaz, var olan dosyanın üzerine yazmaz; iki kez
 # çalıştırmak zararsızdır. winget paketlerini, paket ve kaynak sözleşmelerini kabul ederek kurar.
 

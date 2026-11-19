@@ -115,10 +115,12 @@ Künyede E-ISBN, DOI ve e-kitap satırları (Materyal Türü, Elektronik Yayın 
 - Görseller basıldığı genişlikte en az 300 dpi olmalı; tek renk kitapta gri tonlamalı. Düşük çözünürlüklü
   görseli büyütme, kullanıcıya bildir.
 
-## Tashih ve kapak
+## Tashih, kapak ve DOI
 
 - Yazardan, hocalardan ya da editörden gelen düzeltmeler: `tashih` skill'i (işaretli PDF, izli Word, liste).
 - Kapak önerisi ve tam kapak (ön + sırt + arka): `kapak` skill'i.
+- Kitap ve bölüm DOI'lerinin Crossref kaydı (son PDF'ten): `doi` skill'i.
+- Yayımlanmış kitapların atıf dizini (künye + bölümün ilk sayfası + kaynakça, kaynak tablosu): `atif` skill'i.
 
 ## Matbaa hazırlığı
 

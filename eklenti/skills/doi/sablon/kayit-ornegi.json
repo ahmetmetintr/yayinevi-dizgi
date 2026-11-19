@@ -1,0 +1,52 @@
+{
+  "yatiran": {
+    "ad": "[DOLDUR: Crossref'e yükleyen yayınevi, ör. Vizetek Yayıncılık]",
+    "eposta": "[DOLDUR: yükleme sonucunun geleceği e-posta (yayinevi.md)]"
+  },
+  "kitap": {
+    "tur": "[DOLDUR: editorlu ya da telif]",
+    "baslik": "[DOLDUR: kitap adı, künyedeki gibi]",
+    "alt_baslik": "",
+    "doi": "[DOLDUR: kitap DOI'si, ör. 10.54637/vizetek.9786250000000]",
+    "adres": "[DOLDUR: kitabın sitedeki sayfası, https://…]",
+    "isbn_basili": "",
+    "isbn_elektronik": "[DOLDUR: E-ISBN; basılı ISBN varsa isbn_basili'ye]",
+    "yayim_tarihi": "[DOLDUR: YYYY-AA-GG]",
+    "basili": false,
+    "baski_no": 1,
+    "ozet": "",
+    "yayinevi": "[DOLDUR: yayınevi adı]",
+    "yayin_yeri": "Ankara",
+    "dil": "tr",
+    "kisiler": [
+      {
+        "ad": "[DOLDUR: ad]",
+        "soyad": "[DOLDUR: soyad, ilk harfi büyük: Meşe Yavuz]",
+        "rol": "editor",
+        "orcid": "",
+        "kurum": "",
+        "birim": ""
+      }
+    ]
+  },
+  "bolumler": [
+    {
+      "no": 1,
+      "baslik": "[DOLDUR: bölüm başlığı]",
+      "doi": "[DOLDUR: kitap DOI'si + .ch1]",
+      "ilk_sayfa": "[DOLDUR: basılı sayfa no]",
+      "son_sayfa": "[DOLDUR: basılı sayfa no]",
+      "adres": "",
+      "kisiler": [
+        {
+          "ad": "[DOLDUR: ad]",
+          "soyad": "[DOLDUR: soyad]",
+          "rol": "yazar",
+          "orcid": "[DOLDUR: 0000-0000-0000-0000; yoksa boş bırakın]",
+          "kurum": "[DOLDUR: ör. Erciyes Üniversitesi]",
+          "birim": "[DOLDUR: ör. Eğitim Fakültesi; yoksa boş bırakın]"
+        }
+      ]
+    }
+  ]
+}

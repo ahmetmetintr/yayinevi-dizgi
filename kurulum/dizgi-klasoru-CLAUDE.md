@@ -1,6 +1,7 @@
 # Dizgi çalışma klasörü
 
-Bu klasörde yayınevimizin kitapları dizilir. Dizgi, tashih (düzeltme) ve kapak işlerinde ilgili skill'i kullan.
+Bu klasörde yayınevimizin kitapları dizilir. Dizgi, tashih (düzeltme), imla, kapak, DOI (Crossref) ve
+atıf dizini işlerinde ilgili skill'i kullan.
 
 - Yayınevi kuralları: `yayinevi.md` (her işten önce oku).
 - Her kitap ayrı klasördedir; yazarın dosyaları `kaynak/` içinde değişmeden kalır.

@@ -50,5 +50,17 @@
   ("Değiştir: «eski» → «yeni»", "Ekle: …", "Sil: «…»", "Biçim: …")
 - Yazar ya da hoca düzeltmesi tek ve kesin eşleşmezse uygulanmaz, sorulur
 
+## DOI ve Crossref (doi skill'i)
+- Crossref öneki: [DOLDUR: ör. 10.12345]
+- Kitap DOI'si biçimi: [DOLDUR: ör. <önek>/<yayınevi>.<ISBN, tiresiz>]
+- Bölüm DOI'si biçimi: [DOLDUR: ör. <kitap DOI>.ch1 ya da bölüm DOI'si yok]
+- Bölüm DOI'sinin adresi: [DOLDUR: bölümün kendi sayfası ya da kitabın sayfası]
+- Crossref'te yayınevi adı ve yayın yeri: [DOLDUR]
+- Crossref bildirim e-postası (yükleme sonucu buraya gelir): [DOLDUR]
+
+## Atıf dizini (atif skill'i)
+- Dizine giren kitap PDF'i: [DOLDUR: yayımlanmış son PDF, e-kitap]
+- Bölüm PDF'inin ve Excel'in yükleneceği yer: [DOLDUR]
+
 ## Notlar
 -

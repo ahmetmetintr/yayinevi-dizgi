@@ -5,13 +5,13 @@
   },
   "metadata": {
     "description": "Claude Code ile Türkçe kitap dizgisi: Typst şablonu, Türkçe tipografi düzeltmesi, baskı öncesi kontrol.",
-    "version": "1.2.1"
+    "version": "1.3.0"
   },
   "plugins": [
     {
       "name": "dizgi",
       "source": "./eklenti",
-      "description": "Word dosyasından baskıya hazır PDF: kitap şablonu, Türkçe tipografi, imla denetimi (sarı prova), PDF kontrolü, tashih, kapak ve matbaa hazırlığı."
+      "description": "Word dosyasından baskıya hazır PDF: kitap şablonu, Türkçe tipografi, imla denetimi (sarı prova), PDF kontrolü, tashih, kapak ve matbaa hazırlığı, Crossref DOI kaydı ve atıf dizini."
     }
   ]
 }

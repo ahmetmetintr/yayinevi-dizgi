@@ -1,6 +1,6 @@
 # Yayınevi Dizgi — Claude Code eklentisi
 
-Türkçe kitap yayıncılığı için Claude Code eklentisi. Dört beceri getirir:
+Türkçe kitap yayıncılığı için Claude Code eklentisi. Altı beceri getirir:
 
 - **dizgi** — Word dosyasından Typst ile baskıya hazır PDF: kitap şablonu (iç kapak, künye, içindekiler,
   sağ sayfada açılan bölümler), Türkçe tipografi düzeltmesi (harf dizisi doğrulamalı), baskı öncesi PDF kontrolü.
@@ -11,6 +11,13 @@ Türkçe kitap yayıncılığı için Claude Code eklentisi. Dört beceri getiri
 - **imla** — bütün metni TDK yazım kurallarına göre tarar (bitişik/ayrı yazım, de/da/ki/mi, kesme işareti,
   terim yazımı ve tutarlılığı, tek geçen yazım hataları); düzeltmez, editöre rapor ve düzeltilecek yerleri sarı
   işaretli prova PDF'i hazırlar.
+- **doi** — kitap ve bölüm DOI'lerinin Crossref kaydı: künye, bölüm, yazar, kurum, ORCID ve sayfa bilgisinden
+  denetlenmiş Crossref XML'i ve onay tablosu; önce test, sonra asıl sisteme yükleme; kayıttan sonra doğrulama.
+  Araçlar Crossref'e kendileri yüklemez ve şifre kullanmaz.
+- **atif** — yayınevinin atıf dizini: yayımlanmış kitapların PDF'lerinden kaynakçadaki kaynakları tek tek
+  çıkarır. Her bölüm için kitap künyesi, bölümün ilk sayfası ve bölümün kaynakçası tek PDF'te toplanır. Bütün
+  kitapların kaynakları tek Excel dosyasına yazılır (`atif-dizini.xlsx`: kaynaklar, bölümler, kitaplar). Dönem
+  süzgeci vardır (ör. yılın ilk üç ayı).
 
 Hazır yayınevi profili: **Vizetek Yayıncılık** (2026 yazım kılavuzu ve dizgisi: 16×24, Times New Roman 11 pt /
 1,15, editörlü ve telif kitap düzeni, APA 7 + DOI zorunlu kaynakça, 10–25 sayfalık bölüm, e-kitap).

@@ -1,6 +1,6 @@
 {
   "name": "dizgi",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Kitap iç sayfa dizgisi: Word dosyasından Typst ile baskıya hazır PDF, Türkçe tipografi düzeltmesi, imla denetimi (sarı prova), PDF kontrolü, tashih, kapak ve matbaa hazırlığı.",
   "author": {
     "name": "ahmetmetintr"

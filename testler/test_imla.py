@@ -33,6 +33,8 @@ class Kurallar(unittest.TestCase):
         self.assertEqual(bul("Türkiye'de de görülür."), [])                       # ek + bağlaç doğrudur
         self.assertIn(("veMcMahon", "ve McMahon", "kesin"), bul("(Ochoa veMcMahon, 2024)"))
         self.assertIn(("gelirmi", "gelir mi", "olası"), bul("Hasta gelirmi?"))
+        self.assertIn(("hİpertrofik", "hipertrofik", "kesin"), bul("A-hİpertrofik pİlor stenozu"))
+        self.assertEqual([x for x in bul("McMahon, IgG, pH ve HİRSCHSPRUNG") if "İ" in x[0]], [])
 
 
 class Benzerlik(unittest.TestCase):

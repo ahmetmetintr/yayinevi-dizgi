@@ -91,6 +91,8 @@ def kural_bulgulari(t, kurallar):
         out.append((m.start(), m.group(), f"{m.group(1)}'{m.group(2)}", "kısaltmadan sonraki ek kesmeyle ayrılır", "kesin"))
     for m in re.finditer(rf"(?<![{HARF}'’])({BAGLAC})\s+\1(?![{HARF}])", k):   # "Türkiye'de de" doğrudur
         out.append((m.start(), t[m.start():m.end()], m.group(1), "aynı sözcük iki kez yazılmış", "kesin"))
+    for m in re.finditer(rf"(?<![{HARF}])[{HARF}]*[a-zçğıöşü]İ[{HARF}]*", t):        # "hİpertrofik pİlor"
+        out.append((m.start(), m.group(), m.group()[:1] + tr_kucuk(m.group()[1:]), "sözcük içinde büyük İ", "kesin"))
     for m in re.finditer(rf"(?<![{HARF}'’])(ve|veya|ile)([A-ZÇĞİÖŞÜ][{HARF}]+)", t):   # "veMcMahon"
         out.append((m.start(), m.group(), f"{m.group(1)} {m.group(2)}", "bağlaç sonraki sözcüğe yapışmış", "kesin"))
     for m in re.finditer(rf"(?<![{HARF}])([{HARF}]{{3,}})(mı|mi|mu|mü)(?:dır|dir|sın|sin|yız|yiz)?\?", t):

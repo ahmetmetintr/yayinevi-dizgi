@@ -1,0 +1,86 @@
+{
+  "surum": 1,
+  "kitaplar": [
+    {
+      "kod": "9780000000001",
+      "dosya": "kitaplar/egitimde-guncel-yaklasimlar.pdf",
+      "baslik": "Eğitimde Güncel Yaklaşımlar",
+      "alt_baslik": "Kuram ve Uygulama",
+      "editorler": "Doç. Dr. Örnek EDİTÖR",
+      "isbn": "978-000-00-0000-0",
+      "e_isbn": "978-000-00-0000-1",
+      "doi": "10.00000/ornek.9780000000001",
+      "yayin_yeri": "Ankara",
+      "yayim_tarihi": "2026-11",
+      "kunye_sayfasi": 2,
+      "bolum_kaynagi": "yer imleri",
+      "bolumler": [
+        {
+          "no": 1,
+          "baslik": "Öğretmen Eğitiminde Dijital Dönüşüm",
+          "yazarlar": [
+            "Ayşe YILMAZ",
+            "Mehmet KAYA"
+          ],
+          "doi": "",
+          "ilk_sayfa": "5",
+          "son_sayfa": "7",
+          "pdf_ilk": 7,
+          "pdf_son": 9,
+          "kaynakca_sayfalari": [
+            9
+          ],
+          "atla": false,
+          "kaynaklar": [
+            {
+              "no": 1,
+              "metin": "Kaya, M., & Demir, A. (2023). Öğretmen adaylarında dijital yetkinlik. Eğitim Araştırmaları Dergisi, 12(2), 45–67. https://doi.org/10.0000/ornek.2023.12",
+              "ilk_yazar": "Kaya",
+              "yil": "2023",
+              "baslik": "Öğretmen adaylarında dijital yetkinlik",
+              "doi": "10.0000/ornek.2023.12",
+              "bicim": "APA"
+            },
+            {
+              "no": 2,
+              "metin": "Yılmaz, A. (2024). Dijital çağda öğretmen eğitimi. Örnek Yayıncılık.",
+              "ilk_yazar": "Yılmaz",
+              "yil": "2024",
+              "baslik": "Dijital çağda öğretmen eğitimi",
+              "doi": "",
+              "bicim": "APA"
+            }
+          ]
+        },
+        {
+          "no": 2,
+          "baslik": "Okul Öncesinde Oyun Temelli Öğrenme",
+          "yazarlar": [
+            "Zeynep ARSLAN"
+          ],
+          "doi": "",
+          "ilk_sayfa": "9",
+          "son_sayfa": "10",
+          "pdf_ilk": 11,
+          "pdf_son": 12,
+          "kaynakca_sayfalari": [
+            12
+          ],
+          "atla": false,
+          "kaynaklar": [
+            {
+              "no": 1,
+              "metin": "Arslan, Z. (2022). Oyun ve dil gelişimi. Erken Çocukluk Dergisi, 5(1), 1–20. https://doi.org/10.0000/ornek.2022.5",
+              "ilk_yazar": "Arslan",
+              "yil": "2022",
+              "baslik": "Oyun ve dil gelişimi",
+              "doi": "10.0000/ornek.2022.5",
+              "bicim": "APA"
+            }
+          ]
+        }
+      ],
+      "uyarilar": []
+    }
+  ]
+}

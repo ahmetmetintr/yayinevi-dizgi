@@ -10,17 +10,18 @@ Kullanım:
   py tipografi.py metin.typ --uygula    metin.yedek.typ bırakır, dosyayı düzeltir
 Seçenekler:
   --ara-cizgi en|em          ara söz çizgisi: – (varsayılan) ya da —
-  --konusma-cizgisi em|en    satır başı konuşma çizgisi: — (varsayılan) ya da –
+  --konusma-cizgisi em|en|yok  satır başı konuşma çizgisi: — (varsayılan), – ya da hiç (bilimsel kitap)
 """
 import argparse
 import re
 import sys
 from pathlib import Path
 
-SURUM = "1.0"
+SURUM = "1.1"
 KOD_ANAHTAR = {"set", "show", "let", "import", "include", "if", "for", "while", "context", "return"}
-OZEL = re.compile(r"[\\`$<@#\[\]]|//|/\*|https?://")
-URL = re.compile(r"https?://[^\s\]\)>]+")
+# Bağlantı ve DOI kod sayılır. Pandoc "//" dizisini "/\/" diye kaçışlar; DOI içinde parantez olabilir.
+OZEL = re.compile(r"https?:/\\?/|(?<![\w.])(?:doi:\s?)?10\.\d{4,9}/|[\\`$<@#\[\]]|//|/\*")
+URL = re.compile(r"(?:https?:/\\?/|(?:doi:\s?)?10\.\d{4,9}/)[^\s\]>]+")
 ETIKET = re.compile(r"<[\w\-:.]+>")
 ATIF = re.compile(r"@[\w\-:.]+")
 TANIMLAYICI = re.compile(r"[A-Za-z_][\w\-]*")
@@ -143,7 +144,7 @@ class Tarayici:
             elif s == "/*":
                 bitis = self.m.find("*/", i + 2)
                 i = self._kod(i, self.n if bitis < 0 else bitis + 2)
-            elif s.startswith("http"):
+            elif s.startswith(("http", "doi", "10.")):
                 i = self._kod(i, URL.match(self.m, i).end())
             elif s == "`":
                 tik = len(self.m[i:]) - len(self.m[i:].lstrip("`"))
@@ -187,18 +188,19 @@ def kurallar(ara, konusma):
         ("noktalamadan önce boşluk", r"(?<=[\w”’\"')])[ \t]+(?=[,;:!?…]|\.(?:\s|$))", ""),
         ("parantez içi boşluk", r"(?<=\()[ \t]+|[ \t]+(?=\))", ""),
         ("virgülden sonra boşluk yok", r"(?<=[,;])(?=[^\W\d_])", " "),
-        ("üç nokta", r"(?<!\.)\.[ \t]?\.[ \t]?\.(?!\.)", "…"),
+        ("üç nokta", r"(?<!\.)(?<!, )\.[ \t]?\.[ \t]?\.(?!\.)", "…"),  # APA'nın ", . . . " yazar atlaması kalır
         ("kesme işareti", harf_once + r"[´‘′](?=[^\W\d_])", "’"),
         ("yanlış tırnak", r"«[ \t]*|[ \t]*»|[„‟″]", '"'),
-        ("sayı aralığı çizgisi", r"(?<![\w\-–/])(?<!\d[.,])(\d{1,4})[ \t]?[-–][ \t]?(\d{1,4})(?![\w\-–/]|[.,]\d)", r"\1–\2"),
+        ("sayı aralığı çizgisi", r"(?<![\w\-–/])(?<!\d[.,])(\d{1,4})[ \t]?[-–][ \t]?(?!0(?!\d))(\d{1,4})(?![\w\-–/]|[.,]\d)", r"\1–\2"),  # "5-0" dikiş no.
         ("ara söz çizgisi", r"(?<=\S)[ \t]+(?:-{1,3}|–|—)[ \t]+(?=\S)", f" {ara} "),
         ("yüzde işareti", r"%[ \t]+(?=\d)|(?<![\w%])(\d+(?:[.,]\d+)?)[ \t]?%(?![\w%])",
          lambda e: f"%{e.group(1)}" if e.group(1) else "%"),
         ("bölünmez boşluk: unvan", r"\b(Prof|Doç|Dr|Öğr|Gör|Arş|Uzm|Av|Op|Yrd|Sn)\.[ \t]*(?=[^\W\d_])", r"\1.~"),
         ("bölünmez boşluk: sayfa/no", r"\b(s|ss|bkz|c|no)\.[ \t]+(?=\d)", r"\1.~"),
         ("bölünmez boşluk: birim", r"(\d)[ \t]+(kg|g|mg|km|m|cm|mm|ml|lt|L|TL|°C|dk|sn|sa)(?![^\W_])", r"\1~\2"),
-    ], [
+    ], ([] if konusma is None else [
         ("konuşma çizgisi", r"(?m)^([ \t]*)(?:\\-|–|—|-{2,3})[ \t]+(?=\S)", rf"\g<1>{konusma} "),
+    ]) + [
         ("kesme işareti", r"(?<=[^\W\d_])\\`(?=[^\W\d_])", "’"),
     ]
 
@@ -253,7 +255,7 @@ def main():
     p.add_argument("dosya", nargs="?")
     p.add_argument("--uygula", action="store_true", help="düzeltmeyi dosyaya yaz (yedek bırakır)")
     p.add_argument("--ara-cizgi", choices=["en", "em"], default="en")
-    p.add_argument("--konusma-cizgisi", choices=["em", "en"], default="em")
+    p.add_argument("--konusma-cizgisi", choices=["em", "en", "yok"], default="em")
     p.add_argument("--surum", action="store_true")
     a = p.parse_args()
     if a.surum:
@@ -265,7 +267,7 @@ def main():
     ham = yol.read_bytes()
     bom = ham.startswith(b"\xef\xbb\xbf")
     once = ham.decode("utf-8-sig")
-    cizgi = {"en": "–", "em": "—"}
+    cizgi = {"en": "–", "em": "—", "yok": None}
     sonra, sayac, ornekler = duzelt(once, cizgi[a.ara_cizgi], cizgi[a.konusma_cizgisi])
     harf_ayni, yapi_ayni = dogrula(once, sonra)
 

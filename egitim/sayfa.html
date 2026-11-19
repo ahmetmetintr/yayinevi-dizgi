@@ -147,6 +147,7 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
           <li><a href="#B1" data-nav="B1"><span class="kod">B1</span>Yeni kitap</a></li>
           <li><a href="#B2" data-nav="B2"><span class="kod">B2</span>Word'ü al</a></li>
           <li><a href="#B3" data-nav="B3"><span class="kod">B3</span>Tipografi</a></li>
+          <li><a href="#B3b" data-nav="B3b"><span class="kod">B3b</span>İmla denetimi</a></li>
           <li><a href="#B4" data-nav="B4"><span class="kod">B4</span>Diz</a></li>
           <li><a href="#B5" data-nav="B5"><span class="kod">B5</span>Kontrol</a></li>
           <li><a href="#B6" data-nav="B6"><span class="kod">B6</span>Hoca düzeltmeleri</a></li>
@@ -222,10 +223,11 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
         <h2><span class="no">2</span>Bir kitabı dizmek</h2>
         <p>Her kitapta bu sırayla ilerleyin. Yazarın dosyası <code>kaynak</code> klasöründe hiç değişmeden kalır; Claude yazarın sözcüklerine dokunmaz, yalnız noktalama ve boşluğu düzeltir ve bunu her seferinde harf harf doğrular.</p>
       </div>
-      <div class="akis" aria-label="İş akışı"><span>Word</span><i>→</i><span>metin.typ</span><i>→</i><span>tipografi</span><i>→</i><span>PDF</span><i>→</i><span>kontrol</span><i>→</i><span>hoca düzeltmesi</span><i>→</i><span>matbaa</span></div>
+      <div class="akis" aria-label="İş akışı"><span>Word</span><i>→</i><span>metin.typ</span><i>→</i><span>tipografi</span><i>→</i><span>imla</span><i>→</i><span>PDF</span><i>→</i><span>kontrol</span><i>→</i><span>hoca düzeltmesi</span><i>→</i><span>matbaa</span></div>
       {{KART:B1|Yeni kitap aç|Kitabın klasörünü, şablonunu ve künyesini hazırlar.}}
       {{KART:B2|Word dosyalarını içeri al|Önce Word dosyalarını kitabın <code>kaynak</code> klasörüne kopyalayın; editörlü kitapta her bölüm ayrı dosyadır. Claude dosyaları dönüştürür, bölüm başlıklarını ve yazar bilgilerini (unvan, kurum, ORCID) Vizetek düzenine getirir, sayıları Word'le karşılaştırır.}}
       {{KART:B3|Türkçe tipografi düzeltmesi|Tırnak, kesme işareti, kısa ve uzun çizgi, üç nokta, çift boşluk, yüzde işareti ve bölünmez boşluklar. Önce rapor gelir; siz onaylamadan dosya değişmez.}}
+      {{KART:B3b|İmla denetimi|TDK kurallarına göre bütün metin taranır: bitişik/ayrı yazım, de/da/ki/mi, kesme işareti, terim yazımı, kitapta aynı terimin iki yazımı, tek geçen yazım hataları. Hiçbir şey düzeltilmez; editöre rapor ve düzeltilecek yerleri <strong>sarı</strong> işaretli prova PDF gider.}}
       {{KART:B4|Diz ve PDF üret|İç kapak, künye, içindekiler, sağ sayfada açılan bölümler, üst bilgi ve sayfa numaraları şablondan gelir.}}
       {{KART:B5|Baskı öncesi kontrol|Ölçü, forma, gömülü yazı tipleri, kayan yazı tipi, tek renk baskıda renkli içerik, tire merdiveni, doldurulmamış künye. Akademik kitapta ayrıca kaynakça (DOI zorunlu, APA, atıf eşleşmesi, Crossref) ve editörlü kitapta bölüm denetimi (10–25 sayfa, ORCID).}}
       {{KART:B6|Hocanın düzeltmelerini işle|İşaretli PDF (üstü çizili, ekleme imi, not, el yazısı), izli ya da yorumlu Word ve e-postayla gelen listeler okunur. Yalnız tek ve kesin yere oturan düzeltme uygulanır; gerisi hocaya kısa soru olarak döner. Önceki turların kaybolmadığı her turda denetlenir.}}

@@ -54,6 +54,11 @@ class Kaynakca(unittest.TestCase):
         iki = METIN + "\n= İkinci\nMetin (Ak, 2020).\n#kaynakca[\n  Ak, B. (2020). Z. https://doi.org/10.1/q\n]\n"
         self.assertEqual([len(k) for _, k in bolumler(iki)], [5, 1])
 
+    def test_basligi_ayarli_kaynakca(self):
+        # Klinik Çocuk Cerrahisi (19.11.2026): #kaynakca(baslik: [KAYNAKLAR], duzey: 3)[…] da okunmalı
+        metin = "Metin (Ak, 2020).\n#kaynakca(baslik: [KAYNAKLAR], duzey: 3)[\n  Ak, B. (2020). Z. https://doi.org/10.1/q\n]\n"
+        self.assertEqual([len(k) for _, k in bolumler(metin)], [1])
+
     def test_baslik_altindaki_kaynakca(self):
         metin = "Metin (Ak, 2020).\n\n= Kaynakça\n\nAk, B. (2020). Z. https://doi.org/10.1/q\n"
         self.assertEqual(len(bolumler(metin)[0][1]), 1)

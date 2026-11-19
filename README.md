@@ -1,6 +1,6 @@
 # Yayınevi Dizgi — Claude Code eklentisi
 
-Türkçe kitap yayıncılığı için Claude Code eklentisi. Üç beceri getirir:
+Türkçe kitap yayıncılığı için Claude Code eklentisi. Dört beceri getirir:
 
 - **dizgi** — Word dosyasından Typst ile baskıya hazır PDF: kitap şablonu (iç kapak, künye, içindekiler,
   sağ sayfada açılan bölümler), Türkçe tipografi düzeltmesi (harf dizisi doğrulamalı), baskı öncesi PDF kontrolü.
@@ -8,6 +8,9 @@ Türkçe kitap yayıncılığı için Claude Code eklentisi. Üç beceri getirir
   liste), yalnız tek ve kesin yere oturanı uygular, yazara işaretli PDF ve rapor hazırlar; eski sürüm
   tuzağını her turda denetler.
 - **kapak** — kitabın içinden çıkan dört kapak yönü ve sırt, taşma payı, CMYK ile baskıya hazır tam kapak.
+- **imla** — bütün metni TDK yazım kurallarına göre tarar (bitişik/ayrı yazım, de/da/ki/mi, kesme işareti,
+  terim yazımı ve tutarlılığı, tek geçen yazım hataları); düzeltmez, editöre rapor ve düzeltilecek yerleri sarı
+  işaretli prova PDF'i hazırlar.
 
 Hazır yayınevi profili: **Vizetek Yayıncılık** (2026 yazım kılavuzu ve dizgisi: 16×24, Times New Roman 11 pt /
 1,15, editörlü ve telif kitap düzeni, APA 7 + DOI zorunlu kaynakça, 10–25 sayfalık bölüm, e-kitap).

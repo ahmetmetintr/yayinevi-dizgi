@@ -1,6 +1,6 @@
 # Mimari
 
-Yayınevi dizgi kiti: Claude Code'a kurulan **dizgi eklentisi** (üç beceri: dizgi, tashih, kapak) ve onu
+Yayınevi dizgi kiti: Claude Code'a kurulan **dizgi eklentisi** (dört beceri: dizgi, tashih, kapak, imla) ve onu
 kopyala-yapıştır promptlarla anlatan **eğitim sayfası**. Depo aynı zamanda eklentinin pazar yeridir
 (`.claude-plugin/marketplace.json`); kurulumda yalnız `eklenti/` klasörü kopyalanır.
 
@@ -14,6 +14,7 @@ kopyala-yapıştır promptlarla anlatan **eğitim sayfası**. Depo aynı zamanda
 | `eklenti/skills/dizgi/araclar/` | `tipografi.py`, `pdf_kontrol.py`, `kaynakca_denetle.py` (APA, DOI, atıf, Crossref), `bolum_denetle.py` (bölüm uzunluğu, ORCID), `e_kitap.py` (kapak + yer imi + PDF bilgisi) | Hiçbir şeye |
 | `eklenti/skills/tashih/` | Düzeltme turları: `araclar/` (tashih_oku.py, tashih_uygula.py, tashih_rapor.py) | Hiçbir şeye |
 | `eklenti/skills/kapak/` | Kapak: `sablon/kapak.typ` (ölçü), `araclar/kapak_kutulari.py` | Hiçbir şeye |
+| `eklenti/skills/imla/` | İmla denetimi: `araclar/imla_denetle.py` (rapor + sarı prova deseni), kurallar veri olarak `kurallar/sik-yanlislar.tsv` | Hiçbir şeye (sarı prova `dizgi` şablonunun `sari-desen` ayarıyla) |
 | `kurulum/` | Windows kurulum betiği (`windows.ps1`, `irm … \| iex` ile) ve çalışma klasörüne konan `CLAUDE.md` şablonu | GitHub'daki `main` dalı (ham dosya adresleri) |
 | `egitim/` | Eğitim sayfası: `sayfa.html` iskelet, `promptlar/KOD-ad.md`, `uret.py` | `eklenti/.claude-plugin/plugin.json` (sürüm) |
 | `testler/` | Birim testleri (tipografi, tashih, kaynakça), örnek kitaplar (klasik, Vizetek editörlü ve telif) ve örnek kapak | `eklenti/` |
@@ -32,6 +33,8 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
    tashih_rapor.py → işaretli PDF + rapor). Her tur `tashih/tur-NN/` klasöründe; önceki turlar
    `liste.sonuc.json` ile denetlenir.
 3. Kitap → `kapak` (dört eskiz → seçilen yön → kapak.typ ile tam kapak → kapak_kutulari.py).
+4. metin/*.typ → `imla` (imla_denetle.py → imla-raporu.md + imla-isaretleri.typ → `--input imla=evet` ile sarı prova
+   PDF) → editör kararı → onaylananlar `tashih` turu olarak işlenir. İmla aracı metne hiç yazmaz.
 
 ## Yeni bir şey eklerken
 
@@ -40,6 +43,8 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
 | Yeni beceri | `eklenti/skills/<ad>/SKILL.md` (+ `araclar/`, `sablon/`) | `skills/kapak` |
 | Yeni prompt | `egitim/promptlar/KOD-ad.md` + `sayfa.html`'de `{{KART:KOD|Başlık|Açıklama}}` ve dizin satırı | `D1-kapak-onerileri.md` |
 | Tipografi kuralı | `tipografi.py` → `kurallar()` + `testler/test_tipografi.py` | "üç nokta" |
+| İmla: sık yanlış | `imla/kurallar/sik-yanlislar.tsv` satırı (yanlış · doğru · kural) | `barsak*` → `bağırsak*` |
+| İmla: yeni kural türü | `imla_denetle.py` → `kural_bulgulari()` + `testler/test_imla.py` | kısaltmadan sonra kesmesiz ek |
 | Düzeltme biçimi | `tashih_oku.py` → `ayristir()` + `testler/test_tashih.py` | "Değiştir: «eski» → «yeni»" |
 | PDF denetimi | `pdf_kontrol.py` → `main()` içinde `yaz(...)` | tire merdiveni |
 | Yeni yayınevi | `profiller.typ`'ye profil + `sablon/yayinevi-<ad>.md`; kurulumda `$DizgiProfil = '<ad>'` | `vizetek-editorlu` |

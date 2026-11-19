@@ -33,10 +33,16 @@
 
 // Bölümü sağ sayfaya almak için eklenmiş boş sayfa mı? Her bölüm başlığı sayfa sonundan önce
 // <dizgi-bolum-oncesi> izi bırakır; iz ile başlık arasında iki sayfa varsa aradaki sayfa boştur.
-#let bos-sayfa-mi(p) = query(<dizgi-bolum-oncesi>).any(iz => {
-  let bp = iz.value.page()
-  p == bp - 1 and bp - iz.location().page() == 2
-})
+#let bos-sayfa-mi(p) = (
+  query(<dizgi-bolum-oncesi>).any(iz => {
+    let bp = iz.value.page()
+    p == bp - 1 and bp - iz.location().page() == 2
+  })
+    or query(<dizgi-kisim-oncesi>).zip(query(<dizgi-kisim>)).any(((o, k)) => {
+      let kp = k.location().page()
+      p == kp - 1 and kp - o.location().page() == 2
+    })
+)
 
 #let ust-bilgi(a) = context {
   let p = here().page()
@@ -78,6 +84,9 @@
   if s.len() == 1 { str(s.first()) } else { s.map(str).join(".") + "." }
 }
 
+// Yalnız bölüm (1. düzey) numaralı; yazarların kendi numaralı ara başlıkları ikinci kez numaralanmaz.
+#let bolum-no(..s) = if s.pos().len() == 1 { str(s.pos().first()) }
+
 #let bolum-acilisi(it, a) = {
   [#metadata(it.location()) <dizgi-bolum-oncesi>]
   pagebreak(to: if a.bolum-sag-sayfada { "odd" } else { none }, weak: true)
@@ -97,7 +106,8 @@
       v(0.7em)
     }
     let govde = if b.buyuk { tr-buyuk(it.body) } else { it.body }
-    text(size: boy(b.punto, a.punto), weight: if b.kalin { "bold" } else { "regular" }, govde)
+    let no = if it.numbering != none and a.bolum-etiketi == none [#counter(heading).display("1"). ]
+    text(size: boy(b.punto, a.punto), weight: if b.kalin { "bold" } else { "regular" }, no + govde)
     context {
       let n = bolum-notu.get()
       if n != none { footnote(numbering: _ => "*", n) }
@@ -105,9 +115,9 @@
   })
 }
 
-#let ara-baslik(it, s, punto) = {
+#let ara-baslik(it, s, punto, numarali) = {
   let govde = if s.at("buyuk", default: false) { tr-buyuk(it.body) } else { it.body }
-  let no = if it.numbering != none { counter(heading).display(it.numbering) + h(0.4em) }
+  let no = if numarali and it.numbering != none { counter(heading).display(it.numbering) + h(0.4em) }
   block(above: s.at("ust", default: 1.5em), below: s.at("alt", default: 0.8em), sticky: true, width: 100%, pad(
     left: s.at("girinti", default: 0pt),
     align(s.at("hiza", default: left), {
@@ -140,13 +150,15 @@
   ust-bilgi-bicimi: "bolum", ust-bilgi-ust: auto, ust-bilgi-alt: auto, ust-bilgi-yazi-tipi: auto,
   ust-bilgi-punto: 0.85em, sayfa-no-yazi-tipi: auto, sayfa-no-punto: 0.85em,
   // Başlıklar
-  baslik-yazi-tipi: auto, baslik-numarasi: false, bolum-etiketi: none, bolum-sag-sayfada: true,
+  baslik-yazi-tipi: auto, baslik-numarasi: false, bolum-numarasi: false, bolum-etiketi: none, bolum-sag-sayfada: true,
   bolum-basi-boslugu: 28mm, bolum-basligi: (punto: 1.6, kalin: true, buyuk: false),
   basliklar: ("2": (punto: 1.08), "3": (italik: true)),
   icindekiler-bolum-kalin: false,
   // Şekil, tablo, dipnot
   sekil-numarasi: "surekli", sekil-yazisi: (punto: 0.85em, stil: "normal"), tablo-punto: 0.88em,
   tablo-baslik-zemini: none, dipnot-punto: 0.8em, dipnot-satir-carpani: 1.15, dipnot-bolumde-sifirla: false,
+  // İmla provası: imla_denetle.py --isaret dosyasındaki desen; eşleşen yerler sarıyla işaretlenir (baskıda none)
+  sari-desen: none,
   govde,
 ) = {
   let a = (
@@ -181,9 +193,10 @@
     first-line-indent: (amount: girinti, all: ilk-paragraf-girintisi),
   )
 
-  set heading(numbering: if baslik-numarasi { baslik-no } else { none })
+  set heading(numbering: if baslik-numarasi { baslik-no } else if bolum-numarasi { bolum-no } else { none })
+  show heading: set text(hyphenate: false)
   show heading: it => if it.level == 1 { bolum-acilisi(it, a) } else {
-    ara-baslik(it, basliklar.at(str(it.level), default: (:)), punto)
+    ara-baslik(it, basliklar.at(str(it.level), default: (:)), punto, baslik-numarasi)
   }
 
   set figure(numbering: if sekil-numarasi == "bolum" {
@@ -191,6 +204,8 @@
   } else { "1" })
   set figure.caption(separator: [. ])
   show figure: set block(above: 1.4em, below: 1.4em)
+  show figure: set par(first-line-indent: 0pt)              // görsel paragraf girintisiyle kaymasın
+  show figure.where(kind: table): set block(breakable: true) // uzun tablo sayfa sınırında bölünür
   show figure.where(kind: table): set figure.caption(position: top)
   show figure.caption: it => {
     set text(size: sekil-yazisi.punto, style: if sekil-yazisi.stil == "italik" { "italic" } else { "normal" },
@@ -204,7 +219,9 @@
 
   set footnote.entry(separator: line(length: 25%, stroke: 0.4pt), clearance: 0.9em, gap: 0.4em, indent: 0pt)
   show footnote.entry: set text(size: dipnot-punto)
-  show footnote.entry: set par(first-line-indent: 0pt, leading: (dipnot-satir-carpani - 1) * 1em)
+  show footnote.entry: set par(first-line-indent: 0pt, leading: (dipnot-satir-carpani - 1) * 1em, justify: false)
+  // E-posta adresi bölünmez, tirelenmez ("sti-lev@gmail.com" olmasın). Bağlantılar kutulanmaz: uzun DOI taşar.
+  show regex("[\\w.+\\-]+@[\\w\\-]+(\\.[\\w\\-]+)+"): it => box(it)
 
   show quote.where(block: true): it => block(above: 1.2em, below: 1.2em, pad(x: girinti, {
     set text(size: 0.92em)
@@ -215,6 +232,14 @@
   set list(indent: girinti)
   set enum(indent: girinti)
   show link: it => if e-kitap { it } else { it.body }
+  // Times New Roman'da olmayan karakterler eşdeğerine (kaynak metin değişmez; yedek yazı tipi ve kutucuk olmasın)
+  show regex("[\u{2010}\u{2011}]"): "-"
+  show "\u{1F86A}": sym.arrow.r
+  show regex("[₀₁₂₃₄₅₆₇₈₉]+"): it => sub(it.text.clusters().map(c => str("₀₁₂₃₄₅₆₇₈₉".clusters().position(x => x == c))).join())
+  show regex("[⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻]*[⁰⁴⁵⁶⁷⁸⁹⁺⁻][⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻]*"): it => super(it.text.clusters().map(c => {
+    let i = "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻".clusters().position(x => x == c)
+    if i == none { c } else { "0123456789+−".clusters().at(i) }
+  }).join())
 
   set outline(indent: auto, depth: icindekiler-derinligi)
   show outline.entry: it => {
@@ -227,5 +252,8 @@
   on-sayfalar(on-sayfa-duzeni, a)
   if icindekiler == "basta" { outline(title: [İçindekiler]) }
   [#metadata("oto") <dizgi-ana-metin>]
-  govde
+  if sari-desen == none { govde } else {
+    show regex(sari-desen): it => highlight(fill: rgb("#FFE44D"), extent: 1pt, it)
+    govde
+  }
 }

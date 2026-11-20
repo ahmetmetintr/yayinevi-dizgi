@@ -1,10 +1,10 @@
 #import "/eklenti/skills/dizgi/sablon/ogeler.typ": *
 
-#ana-metin-baslat()
 #numarasiz[Ön Söz]
 Bu kitap, alanın güncel tartışmalarını farklı üniversitelerden yazarların bölümleriyle bir araya getiriyor.
 
 #icindekiler-sayfasi()
+#ana-metin-baslat()
 
 #bolum([Öğretmen Eğitiminde Dijital Dönüşüm], aciklama: [Bu bölüm yazarın doktora tezinden üretilmiştir.], yazarlar: (
   ("Ayşe YILMAZ", [Prof. Dr., Örnek Üniversitesi, Eğitim Fakültesi, Eğitim Bilimleri Bölümü. ORCID: 0000-0002-1825-0097, ayse\@ornek.edu.tr]),

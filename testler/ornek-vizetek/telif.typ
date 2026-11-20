@@ -5,10 +5,10 @@
 #show: kitap.with(..vizetek-telif, baslik: "Satırların Arasında", alt-baslik: "Dizgi Üzerine Denemeler",
   ucuncu-satir: "Uygulayıcılar İçin Bir El Kitabı", yazar: "Dr. Deneme YAZAR", yayinevi: "Örnek Yayıncılık",
   kunye: (("ISBN", "978-000-00-0000-0"),))
-#ana-metin-baslat()
 #numarasiz[Ön Söz]
 Ön söz metni.
 #icindekiler-sayfasi()
+#ana-metin-baslat()
 #kisim("I")[Giriş ve Temeller]
 = Giriş: Dizgi Nedir
 == İlk Kavramlar

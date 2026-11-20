@@ -2,8 +2,10 @@
 
 > Bu dosya Dizgi çalışma klasöründe durur. Dizgi, tashih ve kapak skill'leri onu her işte okur; buradaki değer
 > skill'lerin varsayılanını geçersiz kılar. "Yayınevimizin kurallarını öğren" promptuyla gözden geçirilir.
-> Durum: ÖN DOLDURULDU (19.11.2026) — kaynaklar: vizetek.com.tr, Vizetek 2026 Yazım Kılavuzu, 16×24 Örnek
-> Kitap Yazım Şablonu, Vizetek'in dizdiği bir kitabın ölçümü. [TEYİT] yazan yerleri yayınevi onaylamalı.
+> Durum: ÖN DOLDURULDU (19.11.2026), Vizetek'in dizgi revizyon istekleriyle güncellendi (20.11.2026) — kaynaklar:
+> vizetek.com.tr, Vizetek 2026 Yazım Kılavuzu, 16×24 Örnek Kitap Yazım Şablonu, Vizetek'in dizdiği bir kitabın
+> ölçümü, "Dizgi İçin Revize Edilmesi Gereken Komutlar ve Öneriler" (Vizetek, 20.11.2026). [TEYİT] yazan yerleri
+> yayınevi onaylamalı.
 
 ## Yayınevi
 - Ad: Vizetek Yayıncılık (Vizetek Yayıncılık Sanayi ve Ticaret Limited Şirketi), 2018'den beri, Ankara
@@ -25,10 +27,15 @@
 ## Typst profili
 - Telif kitap (tek ya da birkaç yazar): `vizetek-telif` — "BÖLÜM 1" etiketi, numaralı ara başlıklar (1.1.),
   kısım sayfaları, Tablo 2.1. numarası.
-- Editörlü kitap (bölüm yazarları ayrı): `vizetek-editorlu` — bölüm başlığı tümü büyük harf, yazarlar sağa
-  yaslı (`#bolum(...)`), unvan/kurum/ORCID dipnotta (*, **, ***), tablo ve dipnot numarası her bölümde 1'den.
+- Editörlü kitap (bölüm yazarları ayrı): `vizetek-editorlu` — her bölüm yeni (sağ) sayfada, başlığın üstünde
+  "1. Bölüm" etiketi; bölüm başlığı tümü büyük harf, yazarlar sağa yaslı (`#bolum(...)`), künye (unvan, kurum,
+  ORCID) her zaman dipnotta (*, **, ***), e-posta yazılmaz; tablo ve dipnot numarası her bölümde 1'den.
 - Ön sayfalar: 1 iç kapak (logo) · 2 künye · takdim/ön söz · içindekiler (ön sözden sonra, `#icindekiler-sayfasi()`).
-  Sayfa numarası ön sözde 1'den başlar (`#ana-metin-baslat()` ön sözden hemen önce).
+  Sayfa numarası içindekilerden sonra 1'den başlar (`#ana-metin-baslat()` içindekilerden hemen sonra); ön söz
+  içindekilerde romen rakamıyla. Kitabın üst bilgisi 1. bölümün ilk sayfasından sonra başlar, kitap sonuna kadar
+  sürer; ön söz ve içindekilerde basılmaz.
+- Jenerik şablonu: [TEYİT: Vizetek'in jenerik (iç kapak ve künye) şablonu bekleniyor; gelene kadar şablondaki
+  Vizetek künye düzeni kullanılır].
 
 ## Kitap ölçüleri (profilde hazır)
 | Tür | Kesim | Kenar boşlukları | Not |
@@ -40,15 +47,22 @@
   kitapta Fraunces (ücretsiz, OFL) kullanılmış, bilgisayarda yoksa Times New Roman. [TEYİT: her kitapta mı]
 - Gövde: Times New Roman 11 pt, satır aralığı 1,15 (= 14,5 pt adım), paragraf öncesi 6 pt, ilk satır girintisi
   0,5 cm (başlıktan sonraki paragraf dahil), iki yana yaslı; heceleme isteğe bağlı (açık).
-- Tablo: 10 pt; başlık satırı açık gri zeminli; tablo başlığı tablonun ÜSTÜNDE, sola yaslı, 10 pt
-  ("Tablo 1." / telifte "Tablo 2.1."). Şekil başlığı şeklin ALTINDA, ortalı, 10 pt. [TEYİT: başlık italik mi
-  kalın mı — dizilen kitapta italik, yazar şablonunda kalın]
+- Tablo: içi 10 pt; çok büyük ve dağınık duran tablo 9 ya da 8,5 pt (şablon sığmayan tabloda kendisi dener;
+  elle `#tablo-puntosu(9pt)[…]`); tablo içi metin girintisiz; başlık satırı açık gri zeminli. Tablo başlığı
+  tablonun ÜSTÜNDE, girintisiz ve ortalı, 10 pt ("Tablo 1." / telifte "Tablo 2.1."). Şekil başlığı şeklin
+  ALTINDA, ortalı, 10 pt. [TEYİT: başlık italik mi kalın mı — dizilen kitapta italik, yazar şablonunda kalın]
+- Tek sayfaya sığan tablo bölünmez; tablo ve şekil başlığı tablodan/şekilden ayrı sayfada kalmaz.
+- Tablo ve şekil altı not ve kaynak: 9 pt, girintisiz, iki yana yaslı (`#notlu-sekil`).
+- Bağlantı adresleri (metin, kaynakça, dipnot): siyah, altı çizgisiz.
 - Dipnot: 9 pt. Kaynakça: 9 pt, asılı girinti 1,25 cm, APA 7; her kaynağın sonunda DOI zorunlu.
 - Üst bilgi: iki satır ortalı — kitap adı TÜMÜ BÜYÜK (Calibri 9 pt) + alt başlık italik, altında kısa çizgi;
   bölüm açılışında ve boş sayfada basılmaz. Sayfa numarası alt orta (Lato 8 pt; yoksa Calibri).
-- Başlık düzeyleri (editörlü, Yazım Kılavuzu): 1. düzey ortalı, kalın, TÜMÜ BÜYÜK · 2. düzey sola yaslı, kalın,
-  Sözcükler Büyük Harfle · 3. düzey girintili, kalın, ilk sözcük büyük · 4. düzey girintili, kalın ·
-  5. düzey girintili, düz. Hepsi 11 pt.
+- Bölüm alt başlıkları (editörlü): hepsi 3. düzey gibi sola yaslı, girintisiz, kalın, üstte ve altta aynı
+  boşluk (Vizetek, 20.11.2026; Yazım Kılavuzu'ndaki ortalı/girintili düzeylerin yerine). Hepsi 11 pt.
+  [TEYİT: "üstten ve alttan 0,5" — şablon 3. düzeyin boşluğunu (üstte ≈ 0,58 cm, altta ≈ 0,31 cm) bütün
+  düzeylere uyguladı; 0,5 cm ya da 0,5 satır kesin isteniyorsa bildirilir]
+- Başlık adları kitapta tektir: kaynakça başlığı hep aynı (Kaynaklar ya da Kaynakça, kitapta çoğunlukta olan);
+  tümü büyük GİRİŞ / SONUÇ / KAYNAKLAR baş harfi büyük yazılır (`duzenle.py`).
 
 ## Editörlü kitap kuralları (Yazım Kılavuzu 2026)
 - Bölüm uzunluğu: kaynakça dahil ortalama 10–25 sayfa (`bolum_denetle.py --sayfa 10-25`).
@@ -56,6 +70,9 @@
 - Görseller: özgün biçimde (JPG) ve yüksek çözünürlükte ayrıca gönderilir; dosya adı metindeki numarayla aynı.
 - Ön söz: kitabı tanıtan, hazırlanış amacını anlatan kavramsal çerçeve (editörden).
 - Bölüm sonunda isteğe bağlı "yazar hakkında" yazısı.
+- Bölüm başındaki özet ve anahtar kelimeler dizgiye girmez (`duzenle.py` çıkarır).
+- Künyede ORCID şöyle yazılır: `ORCID: 0009-0009-5384-6169` ("Orcid id", "Orcid no", orcid.org adresi değil).
+- Kaynakça her bölümde yeni sayfadan başlar.
 - Dil: TDK Yazım Kılavuzu.
 
 ## Noktalama
@@ -67,6 +84,10 @@
 - Bölüm başı: sağ sayfa [TEYİT: yalnız e-kitap baskılarında boş sayfa istenmiyorsa `bolum-sag-sayfada: false`]
 - Forma: 16 sayfa · İç baskı: tek renk (siyah) · E-kitap: renkli olabilir, bağlantılar açık (`e-kitap: true`)
 
+## Teslim (dizgi sonunda)
+- Kitabın jeneriği ve her bölüm ayrı PDF; bölüm dosyasının adı "Yazar İsmi, Bölüm Adı" (`bolum_pdfleri.py`).
+- Atıf bülteni için tek dosya: kitap jeneriği + her bölümün ilk sayfası ve kaynakçası (aynı araç).
+
 ## Kapak
 - Arka kapak tanıtım yazısı: 100–150 sözcük, editörden (yazar ya da editör yazar; uydurulmaz)
 - Sırt yazısının yönü: [TEYİT] · Sırtta sıra: yazar/editör · kitap adı · logo
@@ -77,6 +98,9 @@
 - Yayınevi kuralı: kitap dizgiye girdikten sonra imla (yazım) düzeltmesi yapılmaz; yazar metni dizgiden önce
   denetlemelidir. Dizgiden sonra gelen düzeltmede imla maddeleri ayrılır ve editöre sorulur; içerik ve dizgi
   hataları işlenir. [TEYİT: araç düzeltmeyi hızlı işlediği için bu kural gevşetilecek mi]
+- İmla (TDK): alan içi kavram yazımına dokunulmaz (ör. "Hıristiyanlık" yazılmışsa öyle kalır); büyük-küçük harf ve
+  noktalama yanlışı ya da eksiği mutlaka düzeltilir (Vizetek, 20.11.2026). [TEYİT: dizgiden sonra imla
+  düzeltmesi yapılmaz kuralıyla birlikte: imla taraması dizgiden önce yapılıp yazara/editöre mi gider]
 - Yazara giden düzeltme biçimi: PDF üzerinde yorum; her yorum tek başına okunur
   ("Değiştir: «eski» → «yeni»", "Ekle: …", "Sil: «…»", "Biçim: …")
 - Yorumlarda görünecek ad: Vizetek Yayıncılık

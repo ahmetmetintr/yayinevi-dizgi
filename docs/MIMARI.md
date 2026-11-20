@@ -10,8 +10,8 @@ kopyala-yapıştır promptlarla anlatan **eğitim sayfası**. Depo aynı zamanda
 | --- | --- | --- |
 | `.claude-plugin/` | Pazar yeri tanımı: `yayinevi-dizgi` pazarı, `dizgi` eklentisi | `eklenti/` |
 | `eklenti/.claude-plugin/` | Eklenti tanımı ve **sürüm** (`plugin.json`) | — |
-| `eklenti/skills/dizgi/sablon/` | `kitap.typ` (ana şablon) → `on-sayfalar.typ`, `ogeler.typ` (bolum, kisim, kaynakca, kutu, tr-buyuk…); `profiller.typ` (klasik, vizetek-telif, vizetek-editorlu); `ana-dosya.typ`; kural dosyaları `yayinevi.md` (genel), `yayinevi-vizetek.md` | Yalnız kendi içinde |
-| `eklenti/skills/dizgi/araclar/` | `tipografi.py`, `pdf_kontrol.py`, `kaynakca_denetle.py` (APA, DOI, atıf, Crossref), `bolum_denetle.py` (bölüm uzunluğu, ORCID), `e_kitap.py` (kapak + yer imi + PDF bilgisi) | Hiçbir şeye |
+| `eklenti/skills/dizgi/sablon/` | `kitap.typ` (ana şablon; tablo yerleşimi `tablo-yerlesimi`) → `on-sayfalar.typ`, `ogeler.typ` (bolum, kisim, kaynakca, notlu-sekil, tablo-puntosu, kutu, tr-buyuk, duz-metin…), `harita.typ` (bölüm haritası `<dizgi-harita>`); `profiller.typ` (klasik, vizetek-telif, vizetek-editorlu); `ana-dosya.typ`; kural dosyaları `yayinevi.md` (genel), `yayinevi-vizetek.md` | Yalnız kendi içinde |
+| `eklenti/skills/dizgi/araclar/` | `tipografi.py`, `duzenle.py` + `duzenle_kurallari.py` (yayınevi düzeni: özet, künye, başlık adları, tablo notları), `tablo_kur.py` (boşlukla dizilmiş tablo → taslak), `pdf_kontrol.py`, `kaynakca_denetle.py` (APA, DOI, atıf, Crossref), `bolum_denetle.py` (bölüm uzunluğu, ORCID, künye), `bolum_pdfleri.py` (jenerik, bölüm PDF'leri, atıf bülteni), `e_kitap.py` (kapak + yer imi + PDF bilgisi) | Birbirine (aynı beceri: `duzenle_kurallari` → `tipografi.Tarayici`, `kaynakca_denetle.tr_kucuk`); dışarıda yalnız `typst` (bolum_pdfleri) |
 | `eklenti/skills/tashih/` | Düzeltme turları: `araclar/` (tashih_oku.py, tashih_uygula.py, tashih_rapor.py) | Hiçbir şeye |
 | `eklenti/skills/kapak/` | Kapak: `sablon/kapak.typ` (ölçü), `araclar/kapak_kutulari.py` | Hiçbir şeye |
 | `eklenti/skills/imla/` | İmla denetimi: `araclar/imla_denetle.py` (rapor + sarı prova deseni), kurallar veri olarak `kurallar/sik-yanlislar.tsv` | Hiçbir şeye (sarı prova `dizgi` şablonunun `sari-desen` ayarıyla) |
@@ -19,7 +19,7 @@ kopyala-yapıştır promptlarla anlatan **eğitim sayfası**. Depo aynı zamanda
 | `eklenti/skills/atif/` | Atıf dizini: `araclar/` (atif_hazirla.py: PDF → dizin.json; atif_uret.py: denetim, bölüm PDF'leri, Excel; saf modüller atif_kaynakca.py, atif_yapi.py, atif_xlsx.py; atif_ortak.py), `sablon/dizin-ornegi.json` | Kendi `atif_ortak.py`'sine; ağa çıkmaz |
 | `kurulum/` | Windows kurulum betiği (`windows.ps1`, `irm … \| iex` ile) ve çalışma klasörüne konan `CLAUDE.md` şablonu | GitHub'daki `main` dalı (ham dosya adresleri) |
 | `egitim/` | Eğitim sayfası: `sayfa.html` iskelet, `promptlar/KOD-ad.md`, `uret.py` | `eklenti/.claude-plugin/plugin.json` (sürüm) |
-| `testler/` | Birim testleri (tipografi, tashih, kaynakça, imla, doi, atif), örnek kitaplar (klasik, Vizetek editörlü ve telif) ve örnek kapak | `eklenti/` |
+| `testler/` | Birim testleri (tipografi, duzenle, tablo_kur, bolum_pdfleri, tashih, kaynakça, imla, doi, atif) ve şablon testleri (`test_sablon.py`: örnek kitabı derleyip PDF'e bakar), örnek kitaplar (klasik, Vizetek editörlü, gruplu, telif, tablolar) ve örnek kapak | `eklenti/` |
 | `scripts/denetle.sh` | Tek denetim komutu | hepsi |
 | `cikti/` | Üretilen dosyalar (git dışında, elle düzenlenmez) | — |
 
@@ -29,8 +29,9 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
 
 ## Veri akışı
 
-1. Word → `dizgi` (pandoc → metin.typ / bolum-NN.typ → tipografi.py → Typst (profil) → PDF → pdf_kontrol.py,
-   kaynakca_denetle.py, bolum_denetle.py → e_kitap.py).
+1. Word → `dizgi` (pandoc (eski .doc önce LibreOffice) → metin.typ / bolum-NN.typ → duzenle.py (yayınevi düzeni)
+   → tipografi.py → Typst (profil) → PDF + `<dizgi-harita>` → pdf_kontrol.py, kaynakca_denetle.py, bolum_denetle.py
+   → e_kitap.py; bolum_pdfleri.py: `typst eval` (eskisinde `typst query`) ile haritayı okur → jenerik, bölüm PDF'leri, atıf bülteni).
 2. Hoca düzeltmesi → `tashih` (tashih_oku.py → liste.json → tashih_uygula.py → metin.typ → yeni PDF →
    tashih_rapor.py → işaretli PDF + rapor). Her tur `tashih/tur-NN/` klasöründe; önceki turlar
    `liste.sonuc.json` ile denetlenir.
@@ -53,6 +54,9 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
 | Yeni beceri | `eklenti/skills/<ad>/SKILL.md` (+ `araclar/`, `sablon/`) | `skills/kapak` |
 | Yeni prompt | `egitim/promptlar/KOD-ad.md` + `sayfa.html`'de `{{KART:KOD|Başlık|Açıklama}}` ve dizin satırı | `D1-kapak-onerileri.md` |
 | Tipografi kuralı | `tipografi.py` → `kurallar()` + `testler/test_tipografi.py` | "üç nokta" |
+| Yayınevi düzeni kuralı | `duzenle_kurallari.py` → yeni işlev + `KURALLAR` sözlüğü + `testler/test_duzenle.py` | `not_bagla` |
+| Şablon davranışı (Vizetek isteği) | `kitap.typ` parametresi + `profiller.typ` değeri + `testler/test_sablon.py` | `ust-bilgi-baslangici` |
+| Bölüm haritasına alan | `harita.typ` → `kitap-haritasi()`; okuyan `bolum_pdfleri.py` | `kaynakca` aralıkları |
 | İmla: sık yanlış | `imla/kurallar/sik-yanlislar.tsv` satırı (yanlış · doğru · kural) | `barsak*` → `bağırsak*` |
 | İmla: yeni kural türü | `imla_denetle.py` → `kural_bulgulari()` + `testler/test_imla.py` | kısaltmadan sonra kesmesiz ek |
 | Düzeltme biçimi | `tashih_oku.py` → `ayristir()` + `testler/test_tashih.py` | "Değiştir: «eski» → «yeni»" |
@@ -68,6 +72,9 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
 | İş | Yer |
 | --- | --- |
 | Typst metnini yazı ve kod parçalarına ayırma | `tipografi.py` → `Tarayici` |
+| Typst kod çağrısının sonu, metni bloklara (başlık, kod, paragraf) ayırma | `duzenle_kurallari.py` → `kod_sonu`, `bloklar` |
+| Bölüm ve kaynakça sayfaları (PDF'ten tahmin değil, derlemeden) | `harita.typ` → `<dizgi-harita>` |
+| İçeriği düz yazıya çevirme (Typst) | `ogeler.typ` → `duz-metin` |
 | Harf dizisi ve yapı doğrulaması | `tipografi.py` → `dogrula` |
 | Tipografi ve biçim farkını yok sayan eşleştirme | `tashih_uygula.py` → `normallestir` |
 | Kapak ölçüleri (sırt, taşma, panel konumları) | `kapak.typ` → `kapak-olcu` |
@@ -83,5 +90,5 @@ eklentinin içinde tutulmaz; eklenti güncellenince kaybolurdu.
 
 ## Bekçiler
 
-`scripts/denetle.sh`: birim testleri, eklenti ve pazar yeri doğrulaması (`claude plugin validate`), sayfa
+`scripts/denetle.sh`: birim ve şablon testleri (typst ve pymupdf yoksa şablon testleri atlanır), eklenti ve pazar yeri doğrulaması (`claude plugin validate`), sayfa
 üretimi (her prompt sayfada tam bir kez), dosya boyutu (kaynak ≤ 400, test ≤ 600 satır).

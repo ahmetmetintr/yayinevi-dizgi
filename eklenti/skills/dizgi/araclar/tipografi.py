@@ -17,11 +17,12 @@ import re
 import sys
 from pathlib import Path
 
-SURUM = "1.1"
+SURUM = "1.2"
 KOD_ANAHTAR = {"set", "show", "let", "import", "include", "if", "for", "while", "context", "return"}
 # Bağlantı ve DOI kod sayılır. Pandoc "//" dizisini "/\/" diye kaçışlar; DOI içinde parantez olabilir.
+# Eski Wiley (SICI) DOI'lerinde < ve > geçer; pandoc bunları \< ve \> diye kaçışlar, bağlantının parçasıdır.
 OZEL = re.compile(r"https?:/\\?/|(?<![\w.])(?:doi:\s?)?10\.\d{4,9}/|[\\`$<@#\[\]]|//|/\*")
-URL = re.compile(r"(?:https?:/\\?/|(?:doi:\s?)?10\.\d{4,9}/)[^\s\]>]+")
+URL = re.compile(r"(?:https?:/\\?/|(?:doi:\s?)?10\.\d{4,9}/)(?:\\[<>]|[^\s\]>])+")
 ETIKET = re.compile(r"<[\w\-:.]+>")
 ATIF = re.compile(r"@[\w\-:.]+")
 TANIMLAYICI = re.compile(r"[A-Za-z_][\w\-]*")

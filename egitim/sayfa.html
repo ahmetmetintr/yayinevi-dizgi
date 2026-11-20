@@ -146,12 +146,14 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
         <ol>
           <li><a href="#B1" data-nav="B1"><span class="kod">B1</span>Yeni kitap</a></li>
           <li><a href="#B2" data-nav="B2"><span class="kod">B2</span>Word'ü al</a></li>
+          <li><a href="#B2b" data-nav="B2b"><span class="kod">B2b</span>Yayınevi düzeni</a></li>
           <li><a href="#B3" data-nav="B3"><span class="kod">B3</span>Tipografi</a></li>
           <li><a href="#B3b" data-nav="B3b"><span class="kod">B3b</span>İmla denetimi</a></li>
           <li><a href="#B4" data-nav="B4"><span class="kod">B4</span>Diz</a></li>
           <li><a href="#B5" data-nav="B5"><span class="kod">B5</span>Kontrol</a></li>
           <li><a href="#B6" data-nav="B6"><span class="kod">B6</span>Hoca düzeltmeleri</a></li>
           <li><a href="#B7" data-nav="B7"><span class="kod">B7</span>Matbaa, e-kitap</a></li>
+          <li><a href="#B7b" data-nav="B7b"><span class="kod">B7b</span>Jenerik, bölüm PDF'leri</a></li>
           <li><a href="#B8" data-nav="B8"><span class="kod">B8</span>DOI ve Crossref</a></li>
           <li><a href="#B9" data-nav="B9"><span class="kod">B9</span>Atıf dizini</a></li>
         </ol></div>
@@ -225,15 +227,17 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
         <h2><span class="no">2</span>Bir kitabı dizmek</h2>
         <p>Her kitapta bu sırayla ilerleyin. Yazarın dosyası <code>kaynak</code> klasöründe hiç değişmeden kalır; Claude yazarın sözcüklerine dokunmaz, yalnız noktalama ve boşluğu düzeltir ve bunu her seferinde harf harf doğrular.</p>
       </div>
-      <div class="akis" aria-label="İş akışı"><span>Word</span><i>→</i><span>metin.typ</span><i>→</i><span>tipografi</span><i>→</i><span>imla</span><i>→</i><span>PDF</span><i>→</i><span>kontrol</span><i>→</i><span>hoca düzeltmesi</span><i>→</i><span>matbaa</span></div>
+      <div class="akis" aria-label="İş akışı"><span>Word</span><i>→</i><span>metin.typ</span><i>→</i><span>yayınevi düzeni</span><i>→</i><span>tipografi</span><i>→</i><span>imla</span><i>→</i><span>PDF</span><i>→</i><span>kontrol</span><i>→</i><span>hoca düzeltmesi</span><i>→</i><span>matbaa</span><i>→</i><span>jenerik ve bölümler</span></div>
       {{KART:B1|Yeni kitap aç|Kitabın klasörünü, şablonunu ve künyesini hazırlar.}}
       {{KART:B2|Word dosyalarını içeri al|Önce Word dosyalarını kitabın <code>kaynak</code> klasörüne kopyalayın; editörlü kitapta her bölüm ayrı dosyadır. Claude dosyaları dönüştürür, bölüm başlıklarını ve yazar bilgilerini (unvan, kurum, ORCID) Vizetek düzenine getirir, sayıları Word'le karşılaştırır.}}
+      {{KART:B2b|Yayınevi düzenini uygula|Vizetek'in dizgi istekleri: bölüm başındaki özet ve anahtar kelimeler çıkar, künyede e-posta kalmaz ve ORCID tek biçimde yazılır, GİRİŞ / SONUÇ / KAYNAKLAR başlıkları ve kaynakça başlığının adı kitap boyunca aynı olur, tablo altı notlar tabloya bağlanır. Önce rapor gelir; elle bakılacakları (metin içinde kalmış künye, tablosu çizilmemiş "Tablo" yazısı) Claude size sorar.}}
       {{KART:B3|Türkçe tipografi düzeltmesi|Tırnak, kesme işareti, kısa ve uzun çizgi, üç nokta, çift boşluk, yüzde işareti ve bölünmez boşluklar. Önce rapor gelir; siz onaylamadan dosya değişmez.}}
       {{KART:B3b|İmla denetimi|TDK kurallarına göre bütün metin taranır: bitişik/ayrı yazım, de/da/ki/mi, kesme işareti, terim yazımı, kitapta aynı terimin iki yazımı, tek geçen yazım hataları. Hiçbir şey düzeltilmez; editöre rapor ve düzeltilecek yerleri <strong>sarı</strong> işaretli prova PDF gider.}}
-      {{KART:B4|Diz ve PDF üret|İç kapak, künye, içindekiler, sağ sayfada açılan bölümler, üst bilgi ve sayfa numaraları şablondan gelir.}}
+      {{KART:B4|Diz ve PDF üret|İç kapak, künye, içindekiler, sağ sayfada "1. Bölüm" etiketiyle açılan bölümler, üst bilgi (1. bölümden sonra) ve sayfa numaraları (içindekilerden sonra 1'den) şablondan gelir. Tek sayfaya sığan tablo bölünmez; sığmayan önce 9, sonra 8,5 puntoya küçülür.}}
       {{KART:B5|Baskı öncesi kontrol|Ölçü, forma, gömülü yazı tipleri, kayan yazı tipi, tek renk baskıda renkli içerik, tire merdiveni, doldurulmamış künye. Akademik kitapta ayrıca kaynakça (DOI zorunlu, APA, atıf eşleşmesi, Crossref) ve editörlü kitapta bölüm denetimi (10–25 sayfa, ORCID).}}
       {{KART:B6|Hocanın düzeltmelerini işle|İşaretli PDF (üstü çizili, ekleme imi, not, el yazısı), izli ya da yorumlu Word ve e-postayla gelen listeler okunur. Yalnız tek ve kesin yere oturan düzeltme uygulanır; gerisi hocaya kısa soru olarak döner. Önceki turların kaybolmadığı her turda denetlenir.}}
       {{KART:B7|Matbaa ve e-kitap|Künye, forma tamamlama, son kontrol; e-kitapta ön kapak, yer imleri ve PDF bilgileri; teslim notu.}}
+      {{KART:B7b|Jenerik, bölüm PDF'leri ve atıf bülteni|Dizgi bitince: kitabın jeneriği (iç kapak, künye, ön söz, içindekiler), her bölüm ayrı PDF (<code>Yazar İsmi, Bölüm Adı.pdf</code>) ve atıf bültenine eklenecek tek dosya (jenerik + her bölümün ilk sayfası ve kaynakçası). Sayfalar tahmin edilmez, şablondan okunur.}}
       {{KART:B8|DOI'leri Crossref'e kaydet|Kitabın ve her bölümün DOI'si (Vizetek'te <code>…/vizetek.&lt;ISBN&gt;.ch1</code>, <code>.ch2</code> …). Claude bilgileri künyeden ve bölüm açılışlarından toplar, denetler ve tablo olarak onayınıza sunar. Yüklemeyi Crossref hesabı olan kişi yapar: önce test sistemine, sonuç temizse asıl sisteme. Şifre Claude'a verilmez.}}
       {{KART:B9|Atıf dizinini hazırla|Yayımlanmış kitapların son PDF'lerini önce <code>Dizgi\atif-dizini\kitaplar</code> klasörüne koyun. Claude her bölümün kaynakçasındaki kaynakları tek tek çıkarır. Her bölüm için tek bir PDF hazırlar: kitap künyesi, bölümün ilk sayfası ve bölümün kaynakçası. Bütün kaynakları <code>atif-dizini.xlsx</code> dosyasına yazar. Dönemi (ör. yılın ilk üç ayı) künyedeki baskı tarihinden süzer. Bölüm sayısını içindekilerle karşılaştırır ve sonucu tablo olarak gösterir.}}
     </section>

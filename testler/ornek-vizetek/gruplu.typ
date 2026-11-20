@@ -3,10 +3,10 @@
 #import "/eklenti/skills/dizgi/sablon/profiller.typ": vizetek-editorlu
 #import "/eklenti/skills/dizgi/sablon/ogeler.typ": *
 #show: kitap.with(..vizetek-editorlu, bolum-numarasi: true, baslik: "Klinik Deneme", yazar: "Editör: Ad SOYAD")
-#ana-metin-baslat()
 #numarasiz[Ön Söz]
 Ön söz.
 #icindekiler-sayfasi()
+#ana-metin-baslat()
 #kisim("1", etiket: "BÖLÜM")[Temel İlkeler ve Fizyoloji]
 #bolum([Çocuklarda Fizyolojik Farklılıklar], yazarlar: (("Ad SOYAD", [Op. Dr., Örnek Hastanesi. ORCID: 0000-0002-1825-0097]),))
 == 1. Giriş

@@ -8,21 +8,21 @@
 // Ölçüler profilden gelir; kitaba özel farkı ana dosyada parametreyle verin, bu dosyayı değiştirmeyin.
 
 #import "on-sayfalar.typ": on-sayfalar
-#import "ogeler.typ": tr-buyuk, bolum-notu
+#import "ogeler.typ": tr-buyuk, bolum-notu, ana-metin-sayfasi, sayfa-etiketi, duz-metin, tablo-elle
+#import "harita.typ": kitap-haritasi
 
 #assert(sys.version >= version(0, 13, 0), message: "Bu şablon Typst 0.13 ya da üstünü ister (typst --version).")
 
 // --- Hangi sayfada ne basılır -------------------------------------------------------------
 
-// Sayfa numarası ve üst bilginin başladığı fiziksel sayfa: #ana-metin-baslat() varsa orası,
-// yoksa ön sayfalardan sonraki ilk bölüm.
-#let ana-metin-sayfasi() = {
-  let izler = query(<dizgi-ana-metin>)
-  if izler.len() == 0 { return 1 }
-  let elle = izler.filter(i => i.value == "elle")
-  if elle.len() > 0 { return elle.first().location().page() }
-  let sonraki = query(selector(heading.where(level: 1)).after(izler.first().location()))
-  if sonraki.len() > 0 { sonraki.first().location().page() } else { izler.first().location().page() }
+// Ana metindeki ilk bölümün açılış sayfası (numaralı bölüm varsa ilk numaralı bölüm). Vizetek: kitabın üst
+// bilgisi bu sayfadan SONRA başlar; ön söz ve içindekilerde basılmaz (Vizetek, 20.11.2026).
+#let ilk-bolum-sayfasi() = {
+  let bas = ana-metin-sayfasi()
+  let bolumler = query(heading.where(level: 1)).filter(b => b.location().page() >= bas)
+  let numarali = bolumler.filter(b => b.numbering != none)
+  let aday = if numarali.len() > 0 { numarali } else { bolumler }
+  if aday.len() > 0 { aday.first().location().page() } else { bas }
 }
 
 // Bölüm ya da kısım açılış sayfası mı? (Üst bilgi basılmaz.)
@@ -46,7 +46,8 @@
 
 #let ust-bilgi(a) = context {
   let p = here().page()
-  if p >= ana-metin-sayfasi() and not acilis-sayfasi-mi(p) and not bos-sayfa-mi(p) {
+  let bas = if a.ust-bilgi-baslangici == "ilk-bolum" { ilk-bolum-sayfasi() } else { ana-metin-sayfasi() }
+  if p >= bas and not acilis-sayfasi-mi(p) and not bos-sayfa-mi(p) {
     set text(font: a.ust-bilgi-yazi-tipi, size: a.ust-bilgi-punto)
     set par(first-line-indent: 0pt, justify: false, leading: 0.4em)
     show footnote: none
@@ -101,8 +102,12 @@
     set align(center)
     set text(font: a.baslik-yazi-tipi)
     let b = a.bolum-basligi
+    // Bölüm etiketi başlığın üstünde: metin ("BÖLÜM" → BÖLÜM 1) ya da işlev (n => [#n. Bölüm] → 1. Bölüm).
     if it.numbering != none and a.bolum-etiketi != none {
-      text(size: boy(b.punto, a.punto) * 1.2, weight: "regular")[#a.bolum-etiketi #counter(heading).display("1")]
+      let no = counter(heading).display("1")
+      let etiket = if type(a.bolum-etiketi) == function { (a.bolum-etiketi)(no) } else [#a.bolum-etiketi #no]
+      let boyu = if a.bolum-etiketi-punto == auto { boy(b.punto, a.punto) * 1.2 } else { a.bolum-etiketi-punto }
+      text(size: boyu, weight: "regular", etiket)
       v(0.7em)
     }
     let govde = if b.buyuk { tr-buyuk(it.body) } else { it.body }
@@ -132,6 +137,26 @@
   ))
 }
 
+// --- Tablolar ---------------------------------------------------------------------------------
+
+// Tablo bir sayfaya sığıyorsa bölünmez (başlığıyla birlikte sonraki sayfaya geçer). Sığmıyorsa sıradaki küçük
+// punto denenir (Vizetek: 10 → 9 → 8,5 pt). Hiçbirinde sığmayan tablo bölünür; başlığı ilk satırlarıyla aynı
+// sayfada kalır. Elle punto: #tablo-puntosu(9pt)[…] (ogeler.typ). alan: (metin genişliği, metin yüksekliği).
+#let tablo-yerlesimi(it, puntolar, alan) = context {
+  let elle = tablo-elle.get()
+  let adaylar = if elle != none { (elle,) } else { puntolar }
+  let yukseklik(p) = measure({
+    show table: set text(size: p)
+    it
+  }, width: alan.first()).height
+  let sigan = adaylar.find(p => yukseklik(p) <= alan.last())
+  show table: set text(size: if sigan == none { adaylar.last() } else { sigan })
+  if sigan != none { block(breakable: false, width: 100%, it) } else {
+    block(above: 1.4em, below: 0.65em, sticky: true, width: 100%, it.caption)
+    block(below: 1.4em, breakable: true, width: 100%, it.body)
+  }
+}
+
 // --- Ana şablon -------------------------------------------------------------------------------
 
 #let kitap(
@@ -149,14 +174,17 @@
   // Üst ve alt bilgi
   ust-bilgi-bicimi: "bolum", ust-bilgi-ust: auto, ust-bilgi-alt: auto, ust-bilgi-yazi-tipi: auto,
   ust-bilgi-punto: 0.85em, sayfa-no-yazi-tipi: auto, sayfa-no-punto: 0.85em,
+  ust-bilgi-baslangici: "ana-metin", // ya da "ilk-bolum": birinci bölümün ilk sayfasından sonra
   // Başlıklar
-  baslik-yazi-tipi: auto, baslik-numarasi: false, bolum-numarasi: false, bolum-etiketi: none, bolum-sag-sayfada: true,
+  baslik-yazi-tipi: auto, baslik-numarasi: false, bolum-numarasi: false, bolum-etiketi: none, bolum-etiketi-punto: auto,
+  bolum-sag-sayfada: true,
   bolum-basi-boslugu: 28mm, bolum-basligi: (punto: 1.6, kalin: true, buyuk: false),
   basliklar: ("2": (punto: 1.08), "3": (italik: true)),
   icindekiler-bolum-kalin: false,
   // Şekil, tablo, dipnot
-  sekil-numarasi: "surekli", sekil-yazisi: (punto: 0.85em, stil: "normal"), tablo-punto: 0.88em,
-  tablo-baslik-zemini: none, dipnot-punto: 0.8em, dipnot-satir-carpani: 1.15, dipnot-bolumde-sifirla: false,
+  sekil-numarasi: "surekli", sekil-yazisi: (punto: 0.85em, stil: "normal"), tablo-yazisi-hizasi: left,
+  tablo-punto: 0.88em, tablo-kucuk-puntolar: (), tablo-baslik-zemini: none,
+  dipnot-punto: 0.8em, dipnot-satir-carpani: 1.15, dipnot-bolumde-sifirla: false,
   // İmla provası: imla_denetle.py --isaret dosyasındaki desen; eşleşen yerler sarıyla işaretlenir (baskıda none)
   sari-desen: none,
   govde,
@@ -173,7 +201,8 @@
     sayfa-no-yazi-tipi: if sayfa-no-yazi-tipi == auto { yazi-tipi } else { sayfa-no-yazi-tipi },
     sayfa-no-punto: sayfa-no-punto,
     baslik-yazi-tipi: if baslik-yazi-tipi == auto { yazi-tipi } else { baslik-yazi-tipi },
-    bolum-etiketi: bolum-etiketi, bolum-sag-sayfada: bolum-sag-sayfada, bolum-basi-boslugu: bolum-basi-boslugu,
+    ust-bilgi-baslangici: ust-bilgi-baslangici, bolum-etiketi: bolum-etiketi, bolum-etiketi-punto: bolum-etiketi-punto,
+    bolum-sag-sayfada: bolum-sag-sayfada, bolum-basi-boslugu: bolum-basi-boslugu,
     bolum-basligi: bolum-basligi, sekil-numarasi: sekil-numarasi, dipnot-bolumde-sifirla: dipnot-bolumde-sifirla,
   )
   set document(title: baslik, author: yazar)
@@ -205,17 +234,24 @@
   set figure.caption(separator: [. ])
   show figure: set block(above: 1.4em, below: 1.4em)
   show figure: set par(first-line-indent: 0pt)              // görsel paragraf girintisiyle kaymasın
-  show figure.where(kind: table): set block(breakable: true) // uzun tablo sayfa sınırında bölünür
+  show figure.where(kind: table): set block(breakable: true) // bölünüp bölünmeyeceğine tablo-yerlesimi karar verir
   show figure.where(kind: table): set figure.caption(position: top)
   show figure.caption: it => {
     set text(size: sekil-yazisi.punto, style: if sekil-yazisi.stil == "italik" { "italic" } else { "normal" },
       weight: if sekil-yazisi.stil == "kalin" { "bold" } else { "regular" })
-    set par(first-line-indent: 0pt, justify: false)
-    align(if it.kind == table { left } else { center }, it)
+    set par(first-line-indent: 0pt, justify: false, hanging-indent: 0pt)
+    align(if it.kind == table { tablo-yazisi-hizasi } else { center }, it)
   }
   set table(stroke: 0.5pt + black, inset: 4pt, fill: (x, y) => if y == 0 { tablo-baslik-zemini })
   show table: set text(size: tablo-punto)
-  show table: set par(justify: false, first-line-indent: 0pt, leading: 0.2em)
+  show table: set par(justify: false, first-line-indent: 0pt, hanging-indent: 0pt, leading: 0.2em, spacing: 0.4em)
+  show table: set list(indent: 0pt)                         // tablo içi metin girintisiz (Vizetek, 20.11.2026)
+  show table: set enum(indent: 0pt)
+  let metin-alani = (
+    genislik - if simetrik { 2 * dis-bosluk } else { ic-bosluk + dis-bosluk },
+    yukseklik - ust-bosluk - alt-bosluk,
+  )
+  show figure.where(kind: table): it => tablo-yerlesimi(it, (tablo-punto,) + tablo-kucuk-puntolar, metin-alani)
 
   set footnote.entry(separator: line(length: 25%, stroke: 0.4pt), clearance: 0.9em, gap: 0.4em, indent: 0pt)
   show footnote.entry: set text(size: dipnot-punto)
@@ -231,7 +267,16 @@
   }))
   set list(indent: girinti)
   set enum(indent: girinti)
-  show link: it => if e-kitap { it } else { it.body }
+  // Bağlantılar siyah ve altı çizgisiz (Vizetek, 20.11.2026); e-kitapta tıklanır kalır. Word'den altı çizili gelen
+  // adres (pandoc: #underline[https:/\/…]) de düz basılır; altı çizili sıradan yazıya dokunulmaz.
+  show link: it => {
+    show underline: u => u.body
+    set text(fill: black)
+    if e-kitap { it } else { it.body }
+  }
+  show underline: it => if duz-metin(it.body).trim().starts-with(regex("(https?://|www\\.|doi:|10\\.\\d{4,9}/)")) {
+    it.body
+  } else { it }
   // Times New Roman'da olmayan karakterler eşdeğerine (kaynak metin değişmez; yedek yazı tipi ve kutucuk olmasın)
   show regex("[\u{2010}\u{2011}]"): "-"
   show "\u{1F86A}": sym.arrow.r
@@ -244,7 +289,10 @@
   set outline(indent: auto, depth: icindekiler-derinligi)
   show outline.entry: it => {
     show footnote: none
-    it
+    let yer = it.element.location()
+    if yer.page() >= ana-metin-sayfasi() { it } else {  // ön söz: romen rakamı (ana metin 1'den başlar)
+      link(yer, it.indented(it.prefix(), [#it.body() #box(width: 1fr, it.fill) #sayfa-etiketi(yer)]))
+    }
   }
   show outline.entry.where(level: 1): set block(above: 0.9em)
   show outline.entry.where(level: 1): set text(weight: if icindekiler-bolum-kalin { "bold" } else { "regular" })
@@ -256,4 +304,5 @@
     show regex(sari-desen): it => highlight(fill: rgb("#FFE44D"), extent: 1pt, it)
     govde
   }
+  context [#metadata(kitap-haritasi(baslik, yazar)) <dizgi-harita>]  // bolum_pdfleri.py okur
 }

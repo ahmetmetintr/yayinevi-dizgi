@@ -45,7 +45,7 @@ kitabın sitedeki sayfasına gider. `yatiran.eposta`, yükleme sonucunun gelece�
      PDF'ten yalnız bölüm başlıkları ve sayfalar alınır. `[DOLDUR]` yerlerini kitaptan doldur: ISBN, E-ISBN, DOI ve
      editörler künye sayfasından; yazar, kurum ve ORCID bölüm açılış sayfasından ve dipnotlarından gelir (o sayfaların
      metnini pymupdf ile oku). PDF'te yer imi yoksa bölümleri içindekiler sayfasından çıkar.
-   - Sayfa numarası basılı numaradır (Vizetek'te ön sözde 1'den başlar), PDF'in fiziksel sayfası değildir.
+   - Sayfa numarası basılı numaradır (Vizetek'te içindekilerden sonra 1'den başlar; Kasım 2026'dan önceki kitaplarda ön sözde), PDF'in fiziksel sayfası değildir.
 2. **Kitap Crossref'te kayıtlıysa:** `py doi_sorgula.py doi/kayit.json --doldur` çalıştır. Kayıtta boş kalan özet,
    adres, ISBN, tarih ve editör ORCID'leri Crossref'teki kayıttan gelir. Uyarıları kullanıcıya söyle.
 3. **Denetle ve onaylat:** `py doi_xml.py doi/kayit.json --yalniz-denetle`. Hataları `kayit.json`'da düzelt;

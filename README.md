@@ -3,7 +3,10 @@
 Türkçe kitap yayıncılığı için Claude Code eklentisi. Altı beceri getirir:
 
 - **dizgi** — Word dosyasından Typst ile baskıya hazır PDF: kitap şablonu (iç kapak, künye, içindekiler,
-  sağ sayfada açılan bölümler), Türkçe tipografi düzeltmesi (harf dizisi doğrulamalı), baskı öncesi PDF kontrolü.
+  sağ sayfada açılan "1. Bölüm" etiketli bölümler, bölünmeyen ve sığmazsa küçülen tablolar), Türkçe tipografi
+  düzeltmesi (harf dizisi doğrulamalı), yayınevi düzeni (bölüm başı özetin çıkarılması, künyede e-posta ve ORCID,
+  başlık adlarının tekleştirilmesi, tablo altı notlar), baskı öncesi PDF kontrolü; dizgi sonunda kitabın jeneriği,
+  her bölüm ayrı PDF ("Yazar, Bölüm Adı") ve atıf bülteni dosyası (jenerik + bölümlerin ilk sayfası ve kaynakçası).
 - **tashih** — yazardan ya da hocalardan gelen düzeltmeleri okur (işaretli PDF, izli ya da yorumlu Word,
   liste), yalnız tek ve kesin yere oturanı uygular, yazara işaretli PDF ve rapor hazırlar; eski sürüm
   tuzağını her turda denetler.
@@ -20,7 +23,9 @@ Türkçe kitap yayıncılığı için Claude Code eklentisi. Altı beceri getiri
   süzgeci vardır (ör. yılın ilk üç ayı).
 
 Hazır yayınevi profili: **Vizetek Yayıncılık** (2026 yazım kılavuzu ve dizgisi: 16×24, Times New Roman 11 pt /
-1,15, editörlü ve telif kitap düzeni, APA 7 + DOI zorunlu kaynakça, 10–25 sayfalık bölüm, e-kitap).
+1,15, editörlü ve telif kitap düzeni, APA 7 + DOI zorunlu kaynakça, 10–25 sayfalık bölüm, e-kitap; Kasım 2026
+dizgi revizyonu: sayfa 1 içindekilerden sonra, üst bilgi 1. bölümden sonra, sola yaslı ara başlıklar, ortalı tablo
+başlığı, siyah ve altı çizgisiz bağlantılar).
 
 ## Kurulum (Windows, PowerShell)
 

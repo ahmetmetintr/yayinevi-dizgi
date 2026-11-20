@@ -23,6 +23,9 @@ kurallar veri olarak `kurallar/sik-yanlislar.tsv` (yanlış · doğru · kural) 
   gelen terimde ad büyük (Hirschsprung hastalığı).
 - **Terim yazımı:** Türkçe tıp yazımında TDK biçimi (bağırsak, diyafram, nöroblastom, kateter, laparoskopi);
   Latince kalıplar olduğu gibi (diabetes mellitus). Bir kitapta aynı terim tek biçimde yazılır.
+- **Alan içi kavram yazımı korunur** (Vizetek, 20.11.2026): alanında yerleşik yazım TDK'ninkinden farklıysa öneri
+  yapılmaz (yazar "Hıristiyanlık" yazdıysa "Hristiyanlık" yapılmaz); böyle bir kavram `imla-istisnalar.txt`'ye yazılır.
+  Büyük-küçük harf ve noktalama yanlışı ya da eksiği ise mutlaka düzeltilecekler listesine girer.
 - **Rakamlar ve birimler:** tipografi işidir (`dizgi` → `tipografi.py`): "12–18", "5 mg" bölünmez boşluk.
 
 ## İş akışı
@@ -53,4 +56,5 @@ kurallar veri olarak `kurallar/sik-yanlislar.tsv` (yanlış · doğru · kural) 
   ünsüzü ("anomamliler", "beselenme") Türkçe çekimlerle karışmasın diye aramaz; "de/da" bağlacının bitişik
   yazıldığı yerleri (ör. "bende") anlam gerektirdiği için bulmaz. Raporla birlikte örnek sayfaları gözle de oku.
 - Düzeltme önerisini metne kendin uygulama; kullanıcı açıkça "uygula" dese bile önce editör onayını sor
-  (yayınevi kuralı). Yazarın üslubuna, terim seçimine ve noktalama tercihine (tipografi dışı) karışma.
+  (yayınevi kuralı). Yazarın üslubuna ve alan içi terim seçimine karışma; büyük-küçük harf ve noktalama yanlışını
+  ya da eksiğini (Vizetek: mutlaka düzeltilir) raporda göster, editör onayıyla `tashih` turunda işle.

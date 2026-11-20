@@ -3,7 +3,8 @@
 
 PDF'ten: her bölümün sayfa sayısı (PDF yer imlerinden) ve yayınevinin sınırına uyup uymadığı.
 Metinden: #bolum(...) çağrılarında her yazarın unvan, kurum ve ORCID bilgisi; ORCID numaralarının
-sağlama hanesi (ISO 7064 11,2). Metne dokunmaz; yalnız rapor verir.
+sağlama hanesi (ISO 7064 11,2); Vizetek künye kuralları: künyede e-posta yok, ORCID "ORCID: 0000-…" yazılır,
+künye metin içinde değil dipnotta durur (düzeltmesi duzenle.py --kural kunye). Metne dokunmaz; yalnız rapor verir.
 
 Kullanım:
   py bolum_denetle.py cikti/kitap.pdf metin/*.typ --sayfa 10-25
@@ -14,8 +15,11 @@ import re
 import sys
 from pathlib import Path
 
+from duzenle_kurallari import EPOSTA, kunye_disarida
+
 ORCID = re.compile(r"\b(\d{4})-(\d{4})-(\d{4})-(\d{3}[\dX])\b")
 ORCID_YAZIMI = re.compile(r"ORCID\s*:?\s*([^\s,;\]]+)", re.I)
+ORCID_STANDART = re.compile(r"ORCID: \d{4}-\d{4}-\d{4}-\d{3}[\dX]")
 UNVAN = re.compile(r"\b(Prof|Doç|Dr|Öğr|Arş|Uzm|Öğretim|Araştırma|Okutman|Öğretmen|Prof\.|Lect|Assoc|Assist)", re.I)
 ON_SON = {"ön söz", "önsöz", "takdim", "takdim yazıları", "içindekiler", "katkıda bulunanlar", "dizin",
           "editörden", "kaynakça", "kaynaklar", "sunuş", "teşekkür"}
@@ -64,6 +68,12 @@ def metin_denetle(yol):
                 sorunlar.append((baslik, f"{ad}: kurum bilgisi bulunamadı"))
             if "orcid" not in bilgi.lower():
                 sorunlar.append((baslik, f"{ad}: ORCID yok"))
+            elif not ORCID_STANDART.search(bilgi):
+                sorunlar.append((baslik, f"{ad}: ORCID yazımı standart değil (ORCID: 0000-0000-0000-0000)"))
+            if EPOSTA.search(bilgi):
+                sorunlar.append((baslik, f"{ad}: künyede e-posta var (Vizetek: yazılmaz)"))
+    for satir, parca in dict(kunye_disarida(metin)).items():
+        sorunlar.append((f"satır {satir}", f"künye metin içinde, dipnota taşınmalı: {parca}"))
     for e in ORCID_YAZIMI.finditer(metin):
         numara = e.group(1).rstrip(".")
         if not ORCID.fullmatch(numara):

@@ -16,9 +16,11 @@
   girinti: 5mm, ilk-paragraf-girintisi: true,
   ust-bilgi-bicimi: "kitap", ust-bilgi-yazi-tipi: ("Calibri", "Carlito", "Libertinus Serif"), ust-bilgi-punto: 9pt,
   sayfa-no-yazi-tipi: ("Lato", "Calibri", "Carlito", "Libertinus Serif"), sayfa-no-punto: 8pt,
+  ust-bilgi-baslangici: "ilk-bolum", // üst bilgi 1. bölümün ilk sayfasından sonra (Vizetek, 20.11.2026)
   on-sayfa-duzeni: "vizetek", icindekiler: "elle", icindekiler-bolum-kalin: true,
   bolum-basi-boslugu: 22mm,
-  tablo-punto: 10pt, tablo-baslik-zemini: luma(88%),
+  // Tablo: 10 pt, sayfaya sığmazsa 9 ve 8,5 pt; başlığı girintisiz ve ortalı (Vizetek, 20.11.2026)
+  tablo-punto: 10pt, tablo-kucuk-puntolar: (9pt, 8.5pt), tablo-baslik-zemini: luma(88%), tablo-yazisi-hizasi: center,
   sekil-yazisi: (punto: 10pt, stil: "italik"),
   dipnot-punto: 9pt, dipnot-satir-carpani: 1.15,
 )
@@ -35,17 +37,19 @@
   ),
 )
 
-// Editörlü kitap (bölüm yazarları ayrı): Yazım Kılavuzu'ndaki beş başlık düzeyi, numarasız; bölüm
+// Editörlü kitap (bölüm yazarları ayrı): bölümler numaralı, başlığın üstünde "1. Bölüm" etiketi; bölüm
 // başlığı tümü büyük harf; yazarlar sağa yaslı, unvan/kurum/ORCID dipnotta (#bolum); tablo ve dipnot
-// numaraları her bölümde 1'den başlar.
+// numaraları her bölümde 1'den başlar. Ara başlıkların hepsi 3. düzey gibi: sola yaslı, girintisiz, üstte ve
+// altta aynı boşluk; yazarın yazdığı gibi (tümü büyük harfe çevrilmez) (Vizetek, 20.11.2026).
 #let vizetek-editorlu = vizetek-ortak + (
-  baslik-numarasi: false, bolum-etiketi: none, sekil-numarasi: "bolum-basina", dipnot-bolumde-sifirla: true,
+  baslik-numarasi: false, bolum-numarasi: true, bolum-etiketi: n => [#n. Bölüm], bolum-etiketi-punto: 12pt,
+  sekil-numarasi: "bolum-basina", dipnot-bolumde-sifirla: true,
   bolum-basligi: (punto: 13pt, kalin: true, buyuk: true),
   basliklar: (
-    "2": (hiza: center, buyuk: true),
+    "2": (hiza: left),
     "3": (hiza: left),
-    "4": (girinti: 5mm),
-    "5": (girinti: 5mm),
-    "6": (girinti: 5mm, kalin: false),
+    "4": (hiza: left),
+    "5": (hiza: left),
+    "6": (hiza: left, kalin: false),
   ),
 )

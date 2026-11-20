@@ -1,6 +1,6 @@
 ---
 name: dizgi
-description: Kitap iç sayfa dizgisi ve baskı öncesi hazırlık. Word (.docx) ya da metin dosyasından Typst ile baskıya hazır PDF, Türkçe tipografi düzeltmesi, dizgi kontrolü, tashih (düzeltme) işleme, künye ve içindekiler, matbaa hazırlığı. Kullanıcı "dizgi", "mizanpaj", "kitabı diz", "baskıya hazırla", "matbaaya gönder", "tashih", "düzeltmeleri işle", "künye", "içindekiler", "dul satır", "forma" dediğinde ya da bir kitap dosyası verdiğinde kullan.
+description: Kitap iç sayfa dizgisi ve baskı öncesi hazırlık. Word (.docx) ya da metin dosyasından Typst ile baskıya hazır PDF, Türkçe tipografi düzeltmesi, yayınevi düzeni (özet, künye, başlık adları, tablo notları), dizgi kontrolü, tashih (düzeltme) işleme, künye ve içindekiler, matbaa hazırlığı, jenerik ve bölüm bölüm PDF teslimi, atıf bülteni dosyası. Kullanıcı "dizgi", "mizanpaj", "kitabı diz", "baskıya hazırla", "matbaaya gönder", "tashih", "düzeltmeleri işle", "künye", "içindekiler", "dul satır", "forma", "jenerik", "bölüm PDF'leri", "atıf bülteni" dediğinde ya da bir kitap dosyası verdiğinde kullan.
 ---
 
 # Dizgi
@@ -10,9 +10,12 @@ description: Kitap iç sayfa dizgisi ve baskı öncesi hazırlık. Word (.docx) 
 - Sözcük değiştirme, yazım düzeltme, kısaltma, "iyileştirme" yok. Yazım hatası ya da tutarsızlık görürsen
   düzeltme: kitabın `NOTLAR.md` dosyasındaki "Tashih önerileri" listesine yaz ve kullanıcıya göster. Bütün metnin
   imla taraması `imla` becerisinin işidir (rapor + sarı işaretli prova; metne yazmaz).
+- Yayınevi düzeni de biçimdir: bölüm başındaki özet ve anahtar kelimelerin çıkarılması, künyede e-posta ve ORCID
+  yazımı, Giriş/Sonuç/Kaynaklar başlık adları, tablo altı notlar. Elle değil `araclar/duzenle.py` ile yapılır;
+  önce kuru çalıştırma raporu kullanıcıya gösterilir.
 - Şekil ve tablo yazısı biçimdir, metin değil: etiket yayınevi biçimine getirilir. Vizetek: kalın "Tablo 1." /
-  "Şekil 1." (noktalı; telifte "Tablo 2.1."), ardından boşluk ve düz başlık; tablo yazısı üstte sola yaslı, şekil
-  yazısı altta ortalı, 10 pt italik. Yazarın "Tablo 1", "Tablo 1:", "Şekil 3:Başlık" yazımları buna getirilir;
+  "Şekil 1." (noktalı; telifte "Tablo 2.1."), ardından boşluk ve düz başlık; tablo yazısı üstte ortalı ve
+  girintisiz, şekil yazısı altta ortalı, 10 pt italik. Yazarın "Tablo 1", "Tablo 1:", "Şekil 3:Başlık" yazımları buna getirilir;
   Typst'in kendi numarası kapatılır (`#figure(numbering: none, …)`), yoksa "Şekil 1. Şekil 1:" çift basılır.
   Etiket sözcüğünü (Resim, Figür → Şekil) değiştirmek metin içi atıflara da dokunur: kullanıcıya sor.
 - Noktalama ve boşluk düzeltmesini elle değil `araclar/tipografi.py` ile yap. Betik harf dizisi ya da Typst
@@ -24,9 +27,12 @@ description: Kitap iç sayfa dizgisi ve baskı öncesi hazırlık. Word (.docx) 
 Skill klasörü (yüklenirken "Base directory" satırında yazar). Skill klasöründe hiçbir dosyayı değiştirme:
 eklenti güncellenince değişiklik silinir.
 - `sablon/`: `kitap.typ` (şablon), `on-sayfalar.typ`, `ogeler.typ` (metinde kullanılan yardımcılar),
-  `profiller.typ` (klasik, vizetek-telif, vizetek-editorlu), `ana-dosya.typ` (yeni kitabın ana dosyası),
-  `yayinevi.md` (genel kural şablonu), `yayinevi-vizetek.md` (Vizetek kuralları, ön doldurulmuş).
-- `araclar/`: `tipografi.py`, `pdf_kontrol.py`, `kaynakca_denetle.py`, `bolum_denetle.py`, `e_kitap.py`.
+  `harita.typ` (kitabın bölüm haritası: jenerik, bölüm ve kaynakça sayfaları), `profiller.typ` (klasik,
+  vizetek-telif, vizetek-editorlu), `ana-dosya.typ` (yeni kitabın ana dosyası), `yayinevi.md` (genel kural
+  şablonu), `yayinevi-vizetek.md` (Vizetek kuralları, ön doldurulmuş).
+- `araclar/`: `tipografi.py`, `duzenle.py` (yayınevi düzeni; kuralları `duzenle_kurallari.py`), `tablo_kur.py`
+  (boşlukla dizilmiş tablo → tablo taslağı), `pdf_kontrol.py`, `kaynakca_denetle.py`, `bolum_denetle.py`,
+  `bolum_pdfleri.py` (jenerik, bölüm PDF'leri, atıf bülteni), `e_kitap.py`.
 
 Çalışma klasörü (genelde Belgeler/Dizgi; Claude Code burada açılır): `CLAUDE.md` · `yayinevi.md` · her kitaba bir
 klasör. **Her işte önce çalışma klasöründeki `yayinevi.md`'yi oku; oradaki değer bu dosyadaki varsayılanı
@@ -54,22 +60,36 @@ Kitap-Adi/
    (`..vizetek-telif` gibi); kitap türünü (telif / editörlü) kullanıcıya sor. Künyeyi `yayinevi.md`'deki
    sırayla doldur; bilinmeyeni `[DOLDUR: …]` bırak. Logo varsa Dizgi klasöründen kitap klasörüne kopyala.
 2. **Word'ü al.** `pandoc "kaynak/<dosya>.docx" -t typst --wrap=none --extract-media=gorseller -o metin/metin.typ`
+   Eski `.doc` dosyası önce LibreOffice ile çevrilir (macOS textutil tablo ve dipnot yapısını bozar):
+   `soffice --headless --convert-to docx --outdir metin/donusum "kaynak/<dosya>.doc"`.
    Sonra denetle ve raporla: başlıklar (`=` bölüm, `==` ara başlık) ve düzeyleri; dipnot sayısı Word'dekiyle aynı
    mı; görsel ve tablo sayısı; stil verilmeden elle yapılmış başlıklar (tek satırlık kalın paragraflar); boş
-   paragraflar ve elle sayfa sonları; `- ` ile başlayıp yanlışlıkla liste olmuş konuşma satırları. Sözcük
+   paragraflar ve elle sayfa sonları; `- ` ile başlayıp yanlışlıkla liste olmuş konuşma satırları; "Tablo N."
+   yazısı olup tablosu olmayan yerler (tablo Word'de boşluk ya da sekmeyle dizilmiş: tablo nesnesi yoktur,
+   dönüştürücü çizecek tablo bulamaz; `py tablo_kur.py metin/donusum/<dosya>.docx --tablo N` taslak verir, harfleri
+   denetler; taslak Word'e bakılarak kullanıcıyla düzeltilip düz metnin yerine konur). Sözcük
    sayısını `pandoc kaynak.docx -t plain` çıktısıyla karşılaştır; belirgin kayıp varsa dur. Yapı düzeltmesini
    (başlık düzeyi, boş satır) önce listele, onayla uygula; metne dokunma.
    Typst `unknown variable: horizontalrule` derse `#horizontalrule` yerine `#sahne-arasi` yaz. Her metin
    dosyasının başına `#import "../sablon/ogeler.typ": *` ekle.
    **Editörlü kitap:** `kaynak/` içinde bölüm başına bir Word olur. Her birini `metin/bolum-NN.typ`'ye çevir
    (sırayı editöre sor). Her bölümün başındaki başlık ve yazar satırlarını `#bolum([Başlık], aciklama: […],
-   yazarlar: (("Ad SOYAD", [Unvan, Kurum, Bölüm. ORCID: …, e-posta]), …))` biçimine, sonundaki kaynak listesini
+   yazarlar: (("Ad SOYAD", [Unvan, Kurum, Bölüm. ORCID: 0000-0000-0000-0000]), …))` biçimine (künye her zaman
+   dipnottadır, e-posta yazılmaz; yazar künyeyi adının altına metin içinde yazdıysa oradan alınır), sonundaki kaynak listesini
    `#kaynakca[ … ]` bloğuna al (her kaynak ayrı paragraf). Kaynakça bölüm sonunda **yeni sayfadan** başlar
    (`#kaynakca` bunu kendisi yapar; metin biter bitmez kaynakçaya geçilmez). Bir bölümde birkaç yazı ve
    kaynakça varsa her biri `#kaynakca(baslik: [Kaynaklar], duzey: 3)[…]` olur. Yazar bilgisi Word'de dipnottaysa oradan al; eksik
    bilgiyi uydurma, `[DOLDUR]` bırak. `metin/metin.typ` ön sözü ve bölümleri sırayla `#include` eder.
-   **Ön sayfalar (Vizetek profilleri):** ön sözden hemen önce `#ana-metin-baslat()`, ön söz başlığı
-   `#numarasiz[Ön Söz]`, içindekiler ön sözden sonra `#icindekiler-sayfasi()`; kısım varsa `#kisim("I")[Ad]`.
+   **Ön sayfalar (Vizetek profilleri):** ön söz başlığı `#numarasiz[Ön Söz]`, içindekiler ön sözden sonra
+   `#icindekiler-sayfasi()`, hemen ardından `#ana-metin-baslat()`: sayfa numarası içindekilerden sonra 1'den başlar
+   (ön söz içindekilerde romen rakamıyla), kitabın üst bilgisi 1. bölümün ilk sayfasından sonra başlar. Kısım
+   varsa `#kisim("1")[Ad]` ("KISIM 1"; bölümler "1. Bölüm" etiketli olduğundan grup için "BÖLÜM" kullanma).
+   **Yayınevi düzeni (editörlü kitap):** `py duzenle.py "metin/bolum-*.typ"` (kuru çalıştırma) → raporu göster →
+   onayla `--uygula`. Bölüm başındaki özet ve anahtar kelimeler çıkar; künyede e-posta silinir, ORCID
+   `ORCID: 0000-…` olur; tümü büyük GİRİŞ / SONUÇ / KAYNAKLAR baş harfi büyük olur; kaynakça başlığı kitapta en
+   çok kullanılan ada (Kaynaklar ya da Kaynakça) getirilir; şekil ve tablodan sonraki "Not.", "Kaynak:"
+   paragrafları `#notlu-sekil(figure(…))[…]` ile şekle bağlanır. "Elle bakılacaklar" listesini (düzensiz özet,
+   metin içinde kalmış künye, boşlukla dizilmiş tablo, tümü büyük ara başlık) kullanıcıya sor; kendiliğinden düzeltme.
 3. **Tipografi.** `py tipografi.py metin/metin.typ` (kuru çalıştırma) → raporu göster → onayla `--uygula`.
    Çizgi tercihleri `yayinevi.md`'den: `--ara-cizgi en|em`, `--konusma-cizgisi em|en`.
 4. **Diz.** `typst compile kitap.typ cikti/kitap-YYYY-AA-GG.pdf` — uyarıları oku ve çöz.
@@ -81,6 +101,25 @@ Kitap-Adi/
    tutuyor mu) ve editörlü kitapta `py bolum_denetle.py cikti/<pdf> metin/*.typ --sayfa 10-25` (bölüm
    uzunluğu, yazar bilgisi, ORCID sağlaması). Bulunan kaynakça ve yazar sorunlarını düzeltme: editöre liste ver.
 7. **Raporla.** Kısa tablo: sayfa sayısı, uyarılar, yapılanlar, kullanıcıdan beklenenler. `NOTLAR.md`'yi güncelle.
+
+## Tablolar ve şekiller (şablonda hazır)
+
+- Tablo bir sayfaya sığıyorsa bölünmez; başlığıyla birlikte sonraki sayfaya geçer. Sığmıyorsa profildeki küçük
+  puntolar denenir (Vizetek: 10 → 9 → 8,5 pt); yine sığmayan tablo bölünür, başlığı ilk satırlarıyla aynı
+  sayfada kalır, başlık satırı her sayfada yinelenir. Bir tabloya elle punto: `#tablo-puntosu(9pt)[#figure(…)]`.
+- Tablo içi metin girintisizdir (paragraf ve madde imi). Tablo ve şekil altı not ve kaynak 9 pt, girintisiz, iki
+  yana yaslı: `#notlu-sekil(figure(…))[#emph[Not.] …]` (not şekille birlikte kalır) ya da tek başına `#sekil-notu[…]`.
+- Bağlantılar (metin, kaynakça, dipnot) siyah ve altı çizgisizdir; Word'den altı çizili gelen adres de düz basılır.
+
+## Teslim PDF'leri: jenerik, bölümler, atıf bülteni
+
+Son PDF'ten sonra (kitap klasöründe): `py bolum_pdfleri.py kitap.typ cikti/<son>.pdf` → `cikti/teslim/`:
+`<Kitap>, Jenerik.pdf` (iç kapak, künye, ön söz, içindekiler; boş sayfalar atılır), `bolumler/<Yazar>, <Bölüm
+Adı>.pdf` (her bölüm; Vizetek'in dosya adı örneği) ve `<Kitap>, Atıf bülteni.pdf` (jenerik + her bölümün ilk
+sayfası ve kaynakçası, yer imli). Sayfalar tahmin edilmez: şablon her derlemede `<dizgi-harita>` bırakır, araç onu
+Typst'ten (`typst eval`, eskisinde `typst query`) okur; PDF'in sayfa sayısı haritayla tutmazsa durur (eski PDF). Derlemede `--input` verildiyse
+araca da aynısı verilir. Kaynakçası `#kaynakca` ile yazılmamış bölüm bültene yalnız ilk sayfasıyla girer: uyarıyı
+kullanıcıya söyle.
 
 ## E-kitap
 
@@ -121,6 +160,7 @@ Künyede E-ISBN, DOI ve e-kitap satırları (Materyal Türü, Elektronik Yayın 
 - Kapak önerisi ve tam kapak (ön + sırt + arka): `kapak` skill'i.
 - Kitap ve bölüm DOI'lerinin Crossref kaydı (son PDF'ten): `doi` skill'i.
 - Yayımlanmış kitapların atıf dizini (künye + bölümün ilk sayfası + kaynakça, kaynak tablosu): `atif` skill'i.
+  Bu kitle dizilen kitabın atıf bülteni dosyası dizgi bitince `bolum_pdfleri.py` ile hazırlanır (yukarıda).
 
 ## Matbaa hazırlığı
 

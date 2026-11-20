@@ -330,14 +330,14 @@ class UctanUca(unittest.TestCase):
                              ("978-000-00-0000-1", "2026-11", 2))
             b1, b2 = kitap["bolumler"]
             self.assertEqual((b1["baslik"], b1["yazarlar"], b1["ilk_sayfa"], b1["son_sayfa"], len(b1["kaynaklar"])),
-                             ("Öğretmen Eğitiminde Dijital Dönüşüm", ["Ayşe YILMAZ", "Mehmet KAYA"], "5", "7", 2))
+                             ("Öğretmen Eğitiminde Dijital Dönüşüm", ["Ayşe YILMAZ", "Mehmet KAYA"], "1", "4", 2))
             self.assertEqual(b1["kaynaklar"][0]["doi"], "10.0000/ornek.2023.12")
             self.assertEqual((b2["yazarlar"], len(b2["kaynaklar"])), (["Zeynep ARSLAN"], 1))
             bolum_pdf(pymupdf.open(pdf), kitap, b1, Path(k) / "b1.pdf")
             cikti = pymupdf.open(Path(k) / "b1.pdf")
             self.assertEqual(len(cikti), 3)
             self.assertIn("ISBN", cikti[0].get_text())
-            self.assertIn("KAYNAKLAR", cikti[2].get_text())
+            self.assertIn("Kaynaklar", cikti[2].get_text())  # ara başlıklar artık tümü büyük harfe çevrilmez
 
 
 if __name__ == "__main__":

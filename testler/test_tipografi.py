@@ -47,7 +47,9 @@ class Yazi(unittest.TestCase):
     def test_baglanti_ve_doi_korunur(self):
         # pandoc "//" dizisini "/\/" diye kaçışlar; DOI'deki tire aralık çizgisine dönmemeli
         for s in ("https:/\\/doi.org/10.1542/peds.2010-3851", "https://doi.org/10.1016/S0140-6736(20)30183-5",
-                  "doi:10.1542/peds.2010-3851", "yazı 10.1542/peds.2010-3851 numaralı"):
+                  "doi:10.1542/peds.2010-3851", "yazı 10.1542/peds.2010-3851 numaralı",
+                  # eski Wiley (SICI) DOI'si: pandoc < ve > işaretlerini kaçışlar; sondaki "2-1" bozulmamalı
+                  "https:/\\/doi.org/10.1002/(SICI)1097-4679(200004)56:4\\<519::AID-JCLP6\\>3.0.CO;2-1"):
             self.assertEqual(d(s), s)
 
     def test_yuzde_ve_bolunmez_bosluk(self):

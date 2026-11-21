@@ -2,7 +2,9 @@
 """Eğitim sayfasını üretir.
 
 Girdi:  egitim/sayfa.html (sayfa iskeleti) · egitim/promptlar/*.md · eklenti/.claude-plugin/plugin.json
-Çıktı:  cikti/dizgi-egitimi.html — elle düzenlenmez, her değişiklikten sonra yeniden üretilir.
+Çıktı:  cikti/dizgi-egitimi.html — elle düzenlenmez, her değişiklikten sonra yeniden üretilir. Sayfa ilk 1024 baytta
+dilini ve UTF-8 olduğunu söyler (`<html lang="tr">`, `<meta charset="utf-8">`): dosyadan ya da bildirmeyen bir
+sunucudan açılınca Türkçe harfler bozulmasın, büyük harfe çevrilen etiketlerde "i" "İ" olsun ("EĞİTİMİ").
 Kullanım: python3 egitim/uret.py
 
 İşaretler: {{KART:KOD|Başlık|Açıklama}} prompt kartı · {{KOMUT:kimlik::etiket::komut}} terminal kutusu ·
@@ -50,6 +52,9 @@ def main():
     cift = sorted({k for k in kullanilan if kullanilan.count(k) > 1})
     if eksik or cift or "{{" in sayfa:
         sys.exit(f"Sayfada kullanılmayan prompt: {eksik} · iki kez kullanılan: {cift} · artık işaret: {'{{' in sayfa}")
+    bas = sayfa.encode()[:1024].lower()
+    if b'<meta charset="utf-8">' not in bas or b'<html lang="tr">' not in bas:
+        sys.exit("Sayfa ilk 1024 baytta <html lang=\"tr\"> ve <meta charset=\"utf-8\"> bildirmeli; Türkçe harfler bozulur")
     CIKTI.parent.mkdir(exist_ok=True)
     CIKTI.write_text(sayfa, encoding="utf-8")
     print(f"Üretildi: {CIKTI.relative_to(KOK)} ({len(sayfa.encode()) // 1024} KB, {len(kullanilan)} prompt)")

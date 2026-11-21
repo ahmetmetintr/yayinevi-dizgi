@@ -55,6 +55,8 @@ kurallar veri olarak `kurallar/sik-yanlislar.tsv` (yanlış · doğru · kural) 
 - Araç sözlük kullanmaz: listede olmayan ve kitapta tek tek geçmeyen yanlışları kaçırabilir; araya fazladan giren
   ünsüzü ("anomamliler", "beselenme") Türkçe çekimlerle karışmasın diye aramaz; "de/da" bağlacının bitişik
   yazıldığı yerleri (ör. "bende") anlam gerektirdiği için bulmaz. Raporla birlikte örnek sayfaları gözle de oku.
+- 64 harften uzun harf dizileri (yapıştırılmış DNA dizisi, bozuk metin) sözcük sayılmaz, benzerlik denetimine girmez;
+  o denetim sözcük uzunluğunun karesiyle büyüdüğü için böyle bir dizi taramayı dakikalarca kilitlerdi.
 - Düzeltme önerisini metne kendin uygulama; kullanıcı açıkça "uygula" dese bile önce editör onayını sor
   (yayınevi kuralı). Yazarın üslubuna ve alan içi terim seçimine karışma; büyük-küçük harf ve noktalama yanlışını
   ya da eksiğini (Vizetek: mutlaka düzeltilir) raporda göster, editör onayıyla `tashih` turunda işle.

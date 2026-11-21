@@ -53,6 +53,17 @@ class Benzerlik(unittest.TestCase):
         buyuk = Counter({"thomson": 6, "thompson": 1})
         self.assertEqual(benzerlik_bulgulari(sayim, frozenset(), buyuk), {})
 
+    def test_sozcuk_olamayacak_dizi_karsilastirilmaz(self):
+        uzun = "abcçdefgğh" * 7                                           # 70 harf: sözcük değil
+        kisa = uzun[:60]
+        yer = lambda s: s[:20] + s[21] + s[20] + s[22:]                    # yer değiştirmiş harf
+        self.assertEqual(benzerlik_bulgulari(Counter({uzun: 20, yer(uzun): 1}), frozenset()), {})
+        self.assertIn(yer(kisa), benzerlik_bulgulari(Counter({kisa: 20, yer(kisa): 1}), frozenset()))
+        with tempfile.TemporaryDirectory() as d:                         # 300 bin harflik dizi: anında biter
+            yol = Path(d) / "dizi.typ"
+            yol.write_text("Satır.\n" + "acgt" * 75_000 + "\n", encoding="utf-8")
+            self.assertEqual(denetle([str(yol)]), [])
+
     def test_iki_yazim(self):
         b = benzerlik_bulgulari(Counter({"adolesan": 13, "adölesan": 14}), frozenset())
         self.assertIn("iki yazımı", b["adolesan"][1])

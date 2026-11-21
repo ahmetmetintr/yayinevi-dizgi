@@ -10,7 +10,9 @@ Bulgular:
          ("anomamliler" ↔ "anomaliler"); aynı terimin iki yazımı ("orşiopeksi" ↔ "orşidopeksi")
 --isaret: sarı prova için Typst dosyası (`#let imla-deseni = "…"`); kitap.typ şablona `sari-desen` olarak verir.
 --istisna: denetimden muaf sözcükler (satır başına bir sözcük; editörün "doğru" dediği terimler).
-Kaynakçalar taranmaz: özel adlarla doludur ve kaynakça denetimi ayrı araçtır.
+Kaynakçalar taranmaz: özel adlarla doludur ve kaynakça denetimi ayrı araçtır. Sözcük olamayacak uzunluktaki harf
+dizileri (EN_UZUN_SOZCUK'tan uzun: yapıştırılmış DNA dizisi, bozuk metin) benzerlik denetimine girmez; o denetim
+sözcük uzunluğunun karesiyle büyür (500 bin harflik tek dizi taramayı dakikalarca kilitlerdi).
 """
 import argparse
 import re
@@ -18,7 +20,7 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
-SURUM = "1.0"
+SURUM = "1.1"
 KURALLAR = Path(__file__).resolve().parents[1] / "kurallar" / "sik-yanlislar.tsv"
 HARF = "A-Za-zÇĞİÖŞÜçğıöşüÂÎÛâîû"
 ABECE = "abcçdefgğhıijklmnoöprsştuüvyzâîû"
@@ -29,6 +31,7 @@ EK_RAKAM = ("da|de|ta|te|dan|den|tan|ten|lı|li|lu|lü|ya|ye|nın|nin|nun|nün|n
 EK_KISALTMA = "da|de|ta|te|dan|den|tan|ten|ya|ye|yı|yi|yu|yü|nın|nin|nun|nün|ın|in|un|ün|la|le|lar|ler|dır|dir"
 BAGLAC = "ve|veya|ile|bir|bu|da|de|için|olarak|gibi|daha|en|ya|ki|ancak|ise"
 EK_FIIL = re.compile(r"(dır|dir|dur|dür|tır|tir|tur|tür)$")   # "bulgularıdır" ↔ "bulgulardır": ikisi de doğru
+EN_UZUN_SOZCUK = 64   # en uzun Türkçe sözcükler ~50 harf; daha uzun harf dizisi sözcük değildir
 
 
 def tr_kucuk(s):
@@ -123,13 +126,14 @@ def _bir_harf_komsulari(s, son=3):
                 yield s[:i] + c + s[i:], False                        # eksik harf
 
 
-def benzerlik_bulgulari(sayim, istisna, buyuk=Counter(), en_kisa=7, seyrek=2, sik=5):
+def benzerlik_bulgulari(sayim, istisna, buyuk=Counter(), en_kisa=7, seyrek=2, sik=5, en_uzun=EN_UZUN_SOZCUK):
     """Seyrek sözcük sık bir sözcükten tek harfle ayrılıyorsa olası yazım hatası; ikisi de sıksa tutarsız yazım.
-    Hep büyük harfle başlayan ad, aynı biçimdeki adla karşılaştırılmaz (Thompson ↔ Thomson). → {sözcük: (öneri, kural)}"""
+    Hep büyük harfle başlayan ad, aynı biçimdeki adla karşılaştırılmaz (Thompson ↔ Thomson). en_uzun'dan uzun harf
+    dizisine bakılmaz (sözcük değildir; komşuları uzunluğun karesiyle büyür). → {sözcük: (öneri, kural)}"""
     out = {}
     ad_mi = lambda w: buyuk[w] == sayim[w]
     for s, n in sayim.items():
-        if len(s) < en_kisa or s in istisna:
+        if not en_kisa <= len(s) <= en_uzun or s in istisna:
             continue
         adaylar = {a for a, serbest in _bir_harf_komsulari(s) if a != s and sayim.get(a, 0) >= max(sik, n + 1)
                    and not (ad_mi(s) and ad_mi(a)) and not (EK_FIIL.search(s) and EK_FIIL.search(a))

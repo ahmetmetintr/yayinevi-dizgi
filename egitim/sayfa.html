@@ -187,7 +187,7 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
           <label class="tik-etiket"><input type="checkbox" class="tik" data-kod="K1"> Yapıldı</label></div>
         <p class="ne-zaman">Başlat menüsünden <strong>PowerShell</strong>'i açın, satırı yapıştırıp Enter'a basın. Betik Claude Code'u, Git, Typst, Pandoc ve Python'u, Word/PDF ve dizgi eklentilerini kurar; Belgeler'de <strong>Dizgi</strong> klasörünü açar. 10–15 dakika sürebilir; Windows izin pencerelerine "Evet" deyin. Yüklü olanı yeniden kurmaz: yarıda kalırsa aynı satırı yeniden çalıştırın.</p>
         <div class="komutlar">
-          {{KOMUT:k-kur::Windows · PowerShell::irm https://raw.githubusercontent.com/ahmetmetintr/yayinevi-dizgi/main/kurulum/windows.ps1 | iex}}
+          {{KOMUT:k-kur::<span lang="en">Windows</span> · PowerShell::irm https://raw.githubusercontent.com/ahmetmetintr/yayinevi-dizgi/main/kurulum/windows.ps1 | iex}}
         </div>
         <p class="not">Betik, winget paketlerini sözleşmelerini kabul ederek kurar. Ne yaptığını satır satır görmek için: <a href="https://github.com/ahmetmetintr/yayinevi-dizgi/blob/main/kurulum/windows.ps1">kurulum betiği</a>.</p>
       </article>
@@ -197,9 +197,13 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
           <label class="tik-etiket"><input type="checkbox" class="tik" data-kod="K2"> Yapıldı</label></div>
         <p class="ne-zaman">Kurulum penceresini kapatın, yeni bir PowerShell açın ve satırı yapıştırın. İlk açılışta tarayıcıda Claude hesabınızla giriş yapın; klasöre güvenip güvenmediğinizi sorarsa "Evet" deyin. Bundan sonra her çalışmaya bu satırla başlayın.</p>
         <div class="komutlar">
-          {{KOMUT:k-ac::Windows · PowerShell::cd ([Environment]::GetFolderPath('MyDocuments') + '\Dizgi'); claude}}
+          {{KOMUT:k-ac::<span lang="en">Windows</span> · PowerShell::cd ([Environment]::GetFolderPath('MyDocuments') + '\Dizgi'); claude}}
         </div>
         <p class="not">Terminal istemeyenler Claude masaüstü uygulamasının Code sekmesinde Belgeler\Dizgi klasörünü seçerek çalışabilir; eklentiler orada da çalışır.</p>
+        <p class="not">PowerShell <code>claude … is not recognized</code> derse Claude Code kurulu ama klasörü PATH'te değildir (betiğin eski sürümü bunu kalıcı yapmıyordu). Bu satırı bir kez çalıştırın, PowerShell'i kapatıp açın, sonra yukarıdaki satırı yeniden yapıştırın.</p>
+        <div class="komutlar">
+          {{KOMUT:k-yol::<span lang="en">Windows</span> · PowerShell · bir kez::[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('PATH','User') + ";$env:USERPROFILE\.local\bin", 'User')}}
+        </div>
       </article>
 
       {{KART:A2|Yayınevimizin kurallarını tamamla|Vizetek'in kuralları kurulumla hazır gelir (yazım kılavuzu ve dizgiden çıkarıldı). Claude yalnız teyit gereken satırları sorar: tablo başlığının biçimi, sırt yazısının yönü, e-kitapta boş sayfa, dizgiden sonra imla düzeltmesi kuralı. Bir kez yapılır.}}
@@ -209,8 +213,9 @@ footer { grid-column: 1 / -1; border-top: 1px solid var(--cizgi); padding-top: 1
       <details class="yedek" id="Y">
         <summary><span class="kod">Y</span>Betik çalışmazsa: elle kurulum</summary>
         <div class="yedek-ic">
-          <p class="ne-zaman">1. Claude Code'u kurun; bitince PowerShell'i kapatıp açın.</p>
-          <div class="komutlar">{{KOMUT:k-elle-claude::Windows · PowerShell::irm https://claude.ai/install.ps1 | iex}}</div>
+          <p class="ne-zaman">1. Claude Code'u kurun, sonra klasörünü PATH'e ekleyin (kurucu eklemez; eklenmezse <code>claude</code> tanınmaz); bitince PowerShell'i kapatıp açın.</p>
+          <div class="komutlar">{{KOMUT:k-elle-claude::<span lang="en">Windows</span> · PowerShell::irm https://claude.ai/install.ps1 | iex}}
+            {{KOMUT:k-elle-yol::<span lang="en">Windows</span> · PowerShell::[Environment]::SetEnvironmentVariable('PATH', [Environment]::GetEnvironmentVariable('PATH','User') + ";$env:USERPROFILE\.local\bin", 'User')}}</div>
           <p class="ne-zaman">2. Eklentileri kurun: dört satırı sırayla çalıştırın. Bilgisayar GitHub'a erişemiyorsa 3. satırda adres yerine eğitmenin getirdiği klasörün yolunu yazın, örneğin <code>"D:\yayinevi-dizgi"</code>.</p>
           <div class="komutlar">
             {{KOMUT:k-belge-pazar::1 · Belge pazarı::claude plugin marketplace add anthropics/skills}}

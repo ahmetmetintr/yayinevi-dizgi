@@ -4,7 +4,7 @@
 #   irm https://raw.githubusercontent.com/ahmetmetintr/yayinevi-dizgi/main/kurulum/windows.ps1 | iex
 # Yayınevi kuralları Vizetek profiliyle gelir. Başka yayınevi için önce: $DizgiProfil = 'genel'
 #
-# Kurar: Claude Code, Git, Typst, Pandoc, Python 3 ve Python paketleri (pypdf, pymupdf, python-docx);
+# Kurar: Claude Code (klasörünü kalıcı PATH'e ekler), Git, Typst, Pandoc, Python 3 ve Python paketleri (pypdf, pymupdf, python-docx);
 # belge eklentisi (document-skills) ve dizgi eklentisi (dizgi, tashih, kapak, imla, doi, atif); Belgeler\Dizgi çalışma klasörü
 # (CLAUDE.md ve yayinevi.md ile). Yüklü olanı yeniden kurmaz, var olan dosyanın üzerine yazmaz; iki kez
 # çalıştırmak zararsızdır. winget paketlerini, paket ve kaynak sözleşmelerini kabul ederek kurar.
@@ -37,6 +37,21 @@ function DizgiIndir($kaynak, $hedef, $ad) {
   } catch { DizgiKayit $ad "İNDİRİLEMEDİ: $($_.Exception.Message)" }
 }
 
+function DizgiClaudeYolu {
+  # Resmî kurucu claude.exe'yi %USERPROFILE%\.local\bin'e koyar ama bu klasörü PATH'e eklemez: eklenmezse yeni bir
+  # PowerShell "claude is not recognized" der. Klasör kullanıcının kalıcı PATH'ine eklenir (yalnız yoksa; belgedeki yol).
+  $klasor = Join-Path $HOME '.local\bin'
+  if (-not (Test-Path (Join-Path $klasor 'claude.exe'))) { return }
+  $kullanici = [Environment]::GetEnvironmentVariable('Path', 'User')
+  $yollar = @(($kullanici -split ';') | Where-Object { $_ } | ForEach-Object { $_.TrimEnd('\') })
+  if ($yollar -contains $klasor) { DizgiKayit 'Claude Code yolu (PATH)' 'zaten vardı'; return }
+  $yeni = if ($kullanici) { $kullanici.TrimEnd(';') + ';' + $klasor } else { $klasor }
+  [Environment]::SetEnvironmentVariable('Path', $yeni, 'User')
+  if ((([Environment]::GetEnvironmentVariable('Path', 'User')) -split ';') -contains $klasor) {
+    DizgiKayit 'Claude Code yolu (PATH)' 'kalıcı eklendi'
+  } else { DizgiKayit 'Claude Code yolu (PATH)' 'EKLENEMEDİ' }
+}
+
 function DizgiKur {
   DizgiYoluYenile
   if (-not (DizgiKomutVar 'winget')) {
@@ -52,6 +67,7 @@ function DizgiKur {
     DizgiYoluYenile
     if (DizgiKomutVar 'claude') { DizgiKayit 'Claude Code' 'kuruldu' } else { DizgiKayit 'Claude Code' 'KURULAMADI' }
   }
+  DizgiClaudeYolu
 
   # 2. Araçlar
   DizgiWinget 'Git.Git' 'git' 'Git'
@@ -88,7 +104,7 @@ function DizgiKur {
 
   Write-Host "`n== Sonuç" -ForegroundColor Cyan
   $DizgiSonuc | Format-Table -AutoSize | Out-String | Write-Host
-  if ($DizgiSonuc | Where-Object { $_.Durum -match 'KURULAMADI|İNDİRİLEMEDİ' }) {
+  if ($DizgiSonuc | Where-Object { $_.Durum -match 'KURULAMADI|İNDİRİLEMEDİ|EKLENEMEDİ' }) {
     Write-Host 'Bazı adımlar tamamlanmadı. PowerShell''i kapatıp açın ve bu satırı yeniden çalıştırın; sorun sürerse eğitim sayfasındaki elle kurulumu kullanın.' -ForegroundColor Yellow
   }
   Write-Host "Çalışma klasörü: $dizgi"

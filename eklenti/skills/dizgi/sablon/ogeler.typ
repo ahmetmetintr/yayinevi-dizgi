@@ -48,7 +48,8 @@
 //     ("Ad SOYAD", [Prof. Dr., … Üniversitesi, … Fakültesi, … Bölümü. ORCID: 0000-0000-0000-0000]),
 //   ))
 // Künye (unvan, kurum, ORCID) her zaman dipnottadır; e-posta yazılmaz (Vizetek, 20.11.2026).
-// Yazar dipnotları ** ve *** ile işaretlenir; gövde dipnotları her bölümde 1'den başlar.
+// Yazar dipnotları ** ve *** ile işaretlenir; gövde dipnotları her bölümde 1'den başlar. Künyesi boş yazara
+// ("" ya da none) dipnot konmaz; yıldızlar yalnız dipnotu olan yazarlar arasında sayılır (boş *** basılmaz).
 // Açıklama başlığın içine konmaz (içindekilere ve yer imine taşınmasın); kitap.typ onu başlığın yanına basar.
 // Başlık ve yazar adları <dizgi-bolum-bilgi> olarak bırakılır: bolum_pdfleri.py dosya adlarını buradan alır.
 #let bolum-notu = state("dizgi-bolum-notu", none)
@@ -60,9 +61,14 @@
   if yazarlar.len() > 0 {
     block(above: 1.2em, below: 2em, width: 100%, align(right, {
       set par(first-line-indent: 0pt, justify: false)
+      let isaret = 1
       for (i, (ad, bilgi)) in yazarlar.enumerate() {
         strong(ad)
-        footnote(numbering: _ => "*" * (i + 2), bilgi)
+        if bilgi != none and bilgi != "" and bilgi != [] {
+          isaret += 1
+          let yildiz = "*" * isaret
+          footnote(numbering: _ => yildiz, bilgi)
+        }
         if i < yazarlar.len() - 1 { linebreak() }
       }
     }))

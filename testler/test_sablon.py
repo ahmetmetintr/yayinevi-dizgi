@@ -57,6 +57,24 @@ class EditorluKitap(unittest.TestCase):
 
 
 @unittest.skipUnless(GEREKLI, "pymupdf ve typst gerekir")
+class KunyesiBosYazar(unittest.TestCase):
+    """Künyesi boş yazara dipnot konmaz; yıldızlar boşluksuz (**, ***) yalnız dipnotu olanlara."""
+
+    def test_bos_kunye_dipnotsuz(self):
+        with tempfile.TemporaryDirectory() as klasor:
+            pdf = derle("bos-kunye", klasor)
+            sayfa = next(p for p in pdf if "Birinci YAZAR" in p.get_text())  # başlık Türkçe büyük harfle basılır
+            metin = " ".join(satirlar(sayfa))
+            dipnotlar = [s for s in satirlar(sayfa) if s.startswith("*")]
+        self.assertIn("Birinci YAZAR**", metin)
+        self.assertIn("Üçüncü YAZAR***", metin)
+        self.assertNotIn("İkinci YAZAR*", metin)
+        self.assertNotIn("Dördüncü YAZAR*", metin)
+        self.assertNotIn("****", metin)
+        self.assertEqual(dipnotlar, ["**Örnek Üniversitesi. ORCID: 0000-0002-1825-0097", "***Başka Üniversite"])
+
+
+@unittest.skipUnless(GEREKLI, "pymupdf ve typst gerekir")
 class Tablolar(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
